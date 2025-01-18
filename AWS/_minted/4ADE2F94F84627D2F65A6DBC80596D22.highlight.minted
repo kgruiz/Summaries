@@ -3,7 +3,7 @@
     \PYG{n}{S3\PYGZus{}BUCKET\PYGZus{}NAME} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{my\PYGZhy{}bucket}\PYG{l+s+s2}{\PYGZdq{}}
     \PYG{n}{fileKey} \PYG{o}{=} \PYG{n}{event}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Records}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{s3}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{object}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{key}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
     \PYG{c+c1}{\PYGZsh{} ... do something ...}
-    \PYG{k}{return} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{p}{\PYGZob{}}\PYG{o}{\PYGZpc{}}
         \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{statusCode}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mi}{200}\PYG{p}{,}
         \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{body}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Processing complete}\PYG{l+s+s2}{\PYGZdq{}}
     \PYG{p}{\PYGZcb{}}

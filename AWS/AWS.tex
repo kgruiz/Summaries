@@ -36,7 +36,7 @@
 % HYPERLINKS
 %--------------------------------------------------------------------
 \usepackage{hyperref}
-\hypersetup{
+\hypersetup{%
   colorlinks=true,
   linkcolor=accentColor,
   urlcolor=accentColor
@@ -55,8 +55,8 @@
 \usetikzlibrary{shapes,arrows,positioning,calc,arrows.meta,shapes.misc}
 
 % Our custom TikZ styles, updated to match the new palette:
-\tikzset{
-  serviceBox/.style={
+\tikzset{%
+  serviceBox/.style={%
     rectangle,
     rounded corners,
     draw=mainDark,
@@ -65,12 +65,12 @@
     minimum height=1.2cm,
     align=center
   },
-  arrowLine/.style={
+  arrowLine/.style={%
     -{Latex[length=3mm,width=2mm]},
     thick,
     color=mainDark
   },
-  cloudService/.style={
+  cloudService/.style={%
     cloud,
     draw=mainDark,
     fill=boxBg,
@@ -80,7 +80,7 @@
     minimum width=2.4cm,
     align=center
   },
-  database/.style={
+  database/.style={%
     cylinder,
     cylinder uses custom fill,
     cylinder body fill=boxBg,
@@ -91,7 +91,7 @@
     minimum width=1.4cm,
     align=center
   },
-  userFigure/.style={
+  userFigure/.style={%
     rectangle,
     rounded corners,
     draw=mainDark,
@@ -105,7 +105,7 @@
 %--------------------------------------------------------------------
 % TITLE
 %--------------------------------------------------------------------
-\title{
+\title{%
   \vspace{-1.5cm}
   \color{mainDark}\Huge A Modern, Visual Introduction to AWS \\
   \vspace{0.1cm}
@@ -179,7 +179,7 @@ AWS is a \textbf{cloud computing} platform from Amazon. You can:
 
 \subsection{Visual Overview}
 \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{\textwidth}{!}{%
         \begin{tikzpicture}[
                 node distance=2.1cm,
                 every node/.style={font=\small}
@@ -213,7 +213,7 @@ Companies host static or dynamic websites on AWS. For example:
 \vspace{-0.3cm}
 \subsubsection{Static Site with S3 \& CloudFront}
 \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.5cm]
             \node[userFigure] (user) {User (Browser)};
             \node[serviceBox, right=2.5cm of user] (cloudfront) {CloudFront};
@@ -251,7 +251,7 @@ Try hosting a simple \textbf{static site on S3} or building a \textbf{file proce
 Whenever a new file arrives in S3, a Lambda function can process it and then store metadata in a database.
 
 \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.2cm]
             \node[userFigure] (upload) {User Upload};
             \node[cloudService, right=2.5cm of upload] (s3) {S3};
@@ -269,7 +269,7 @@ Whenever a new file arrives in S3, a Lambda function can process it and then sto
 \textbf{CloudWatch} gathers logs and metrics from your AWS resources. It can trigger alarms if your app needs scaling or if there’s an error spike.
 
 \begin{center}
-    \resizebox{0.9\textwidth}{!}{
+    \resizebox{0.9\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.2cm]
             \node[serviceBox] (instances) {EC2/Lambda};
             \node[serviceBox, right=2.5cm of instances] (cw) {CloudWatch};
@@ -302,7 +302,7 @@ def ProcessFile(event, context):
     S3_BUCKET_NAME = "my-bucket"
     fileKey = event["Records"][0]["s3"]["object"]["key"]
     # ... do something ...
-    return {
+    return {%
         "statusCode": 200,
         "body": "Processing complete"
     }
@@ -347,7 +347,7 @@ Distribute content (images, videos, etc.) via a global network of edge locations
 
 \subsection{A Typical Serverless Architecture}
 \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.2cm]
             \node[userFigure] (user) {User/Client};
             \node[serviceBox, right=2.5cm of user] (apiGW) {API Gateway};
@@ -363,7 +363,7 @@ Distribute content (images, videos, etc.) via a global network of edge locations
 
 \subsection{Monitoring Loop}
 \begin{center}
-    \resizebox{0.8\textwidth}{!}{
+    \resizebox{0.8\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.2cm]
             \node[serviceBox] (instances) {EC2 / Lambda};
             \node[serviceBox, right=2.5cm of instances] (cw) {CloudWatch};
@@ -406,7 +406,7 @@ Distribute content (images, videos, etc.) via a global network of edge locations
 \end{itemize}
 
 \begin{center}
-    \resizebox{0.9\textwidth}{!}{
+    \resizebox{0.9\textwidth}{!}{%
         \begin{tikzpicture}[node distance=2.2cm]
             \node[serviceBox] (basic) {Basics:\\S3, Lambda, DynamoDB};
             \node[serviceBox, right=2.2cm of basic] (inter) {Intermediate:\\EC2, RDS, API GW};
