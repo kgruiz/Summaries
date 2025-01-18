@@ -1,0 +1,9 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{requests}
+
+\PYG{n}{res} \PYG{o}{=} \PYG{n}{requests}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{https://api.example.com/data}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{k}{if} \PYG{n}{res}\PYG{o}{.}\PYG{n}{status\PYGZus{}code} \PYG{o}{==} \PYG{l+m+mi}{200}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{res}\PYG{o}{.}\PYG{n}{json}\PYG{p}{(}\PYG{p}{)}\PYG{p}{)}
+\PYG{k}{else}\PYG{p}{:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Error fetching data}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{MintedVerbatim}

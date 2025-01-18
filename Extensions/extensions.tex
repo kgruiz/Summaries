@@ -1,217 +1,173 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[12pt,a4paper]{article}
 
-% Page layout
-\usepackage{geometry}
-\geometry{margin=1in}
+%--------------------------
+%--- PACKAGES & SETTINGS---
+%--------------------------
 
-% Typography and improved spacing
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}            % Keep the modern Latin Modern font
-\usepackage{microtype}          % Better text rendering
-\renewcommand{\familydefault}{\sfdefault}  % Sans-serif text
+\usepackage[margin=1in]{geometry}     % 1-inch margins
+\usepackage[T1]{fontenc}             % Better font encoding
+\usepackage{lmodern}                 % Modern Latin font
+\usepackage{microtype}               % Improved text spacing
+\usepackage{xcolor}                  % Colors
 
-% Mathematics, links, and graphics
+% Basic math and images
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+
+% Hyperlinks
 \usepackage{hyperref}
+\hypersetup{%
+  colorlinks = true,
+  urlcolor   = teal,
+  linkcolor  = teal,
+  citecolor  = teal
+}
 
-% Colors
-\usepackage{xcolor}
-% A minimal color palette
-\definecolor{accent}{HTML}{1F618D}       % Accent color for headings/borders
-\definecolor{codeBg}{HTML}{F9F9F9}
-\definecolor{codeBorder}{HTML}{CCCCCC}
+% Minted for code, ensure to compile with --shell-escape
+\usepackage{minted}
 
-% Title formatting
+% Define custom colors for minted
+\definecolor{MintedLightGray}{HTML}{F7F7F7}
+\setminted{%
+  style=friendly,
+  fontsize=\small,
+  breaklines=true,
+  breakanywhere=true,
+  frame=lines,
+  framesep=0.7em,
+  baselinestretch=1.1,
+  bgcolor=MintedLightGray
+}
+
+% A single accent color for headings
+\definecolor{accent}{HTML}{1F618D}
+
+% Title and section formatting
 \usepackage{titlesec}
 \titleformat{\section}{\Large\bfseries\color{accent}}{\thesection}{1em}{}
 \titleformat{\subsection}{\large\bfseries\color{accent}}{\thesubsection}{1em}{}
-\setlength{\parskip}{0.8em}
-\setlength{\parindent}{0pt}
 
-% tcolorbox for “ExampleBox” and “InfoBox”
-\usepackage{tcolorbox}
-\tcbuselibrary{listingsutf8}
+\renewcommand{\familydefault}{\sfdefault} % Sans-serif for a clean look
+\setlength{\parskip}{0.8em}              % Extra spacing between paragraphs
+\setlength{\parindent}{0pt}             % No indentation
 
-% ExampleBox with a default title
-\newtcolorbox{ExampleBox}[1][Example]{%
-  colback=codeBg,
-  colframe=accent,
-  fontupper=\ttfamily\small,
-  boxrule=0.5pt,
-  arc=3pt,
-  title=#1
-}
+% Simplified table style
+\usepackage{array}
 
-% InfoBox with a default title
-\newtcolorbox{InfoBox}[1][Information]{%
-  colback=white,
-  colframe=codeBorder,
-  fontupper=\small\bfseries,
-  boxrule=0.5pt,
-  arc=3pt,
-  title=#1
-}
+% Title info
+\title{\Huge A Simple Guide to Safari Extensions}
+\date{}   % No date
+\author{} % No author name
 
-% For the table in “Pros and Cons of Key Languages”
-\usepackage{longtable}
-
-% Document title
-\title{\Huge \textbf{Safari Extensions: A Modern Guide}}
-\author{}
-\date{}
+%--------------------------
+%--- DOCUMENT BEGIN -------
+%--------------------------
 
 \begin{document}
+
 \maketitle
 
-\section{Introduction}
-Safari extensions enhance browser functionality by interacting with web pages or Safari itself. They are built using web technologies like HTML, CSS, and JavaScript. Apple supports two types of extensions:
+\section{What Are Safari Extensions?}
+A Safari extension adds new features to Safari or modifies its behavior. It uses HTML, CSS, JavaScript, and JSON at its core. There are two main types:
 
-\begin{InfoBox}
-    \begin{itemize}
-        \item \textbf{Safari Web Extensions}: Based on the WebExtensions API, compatible with Chrome, Firefox, and Edge. Recommended for most use cases due to cross-browser compatibility.
-        \item \textbf{Safari App Extensions}: Built into macOS apps and integrate deeply with macOS and Safari.
-    \end{itemize}
-\end{InfoBox}
+\subsection{Safari Web Extensions}
+These rely on the WebExtensions API, also used by Chrome, Firefox, and Edge, making them generally cross-browser.
 
-\section{Languages and Technologies}
-Safari extensions use a variety of languages depending on their purpose. Some common languages include:
+\subsection{Safari App Extensions}
+These live inside a macOS app and integrate deeply with Safari and macOS. Ideal if you need features that interact with the system at a lower level.
 
-\subsection{Core Languages (Web Extensions)}
+\section{Common Languages and Tools}
+While Safari extensions are primarily written in HTML, CSS, JavaScript, and JSON, other languages can provide additional power:
+
 \begin{itemize}
-    \item \textbf{HTML}: Defines the structure of the extension's UI, such as popups and options pages.
-    \item \textbf{CSS}: Styles the visual elements of the extension.
-    \item \textbf{JavaScript}: Implements logic, interactivity, and communication between the extension's components.
-    \item \textbf{JSON}: Used in the \texttt{manifest.json} file to define metadata, permissions, and configuration.
+    \item \textbf{TypeScript:} Adds type safety to JavaScript.
+    \item \textbf{WebAssembly:} Run C/C++/Rust code in the browser with near-native speed.
+    \item \textbf{Swift:} Especially for Safari App Extensions on macOS/iOS.
+    \item \textbf{Python:} Handy for build scripts, automation, or backend tasks.
+    \item \textbf{C++:} Can be compiled to WebAssembly for computationally intensive tasks.
 \end{itemize}
 
-\subsection{Advanced and Supporting Languages}
-\begin{itemize}
-    \item \textbf{TypeScript}: Adds static typing to JavaScript, improving maintainability and reducing runtime errors.
-    \item \textbf{WebAssembly (Wasm)}: For performance-critical tasks like image processing or cryptographic computations. Typically written in:
-          \begin{itemize}
-              \item \textbf{C}
-              \item \textbf{C++}
-              \item \textbf{Rust}
-          \end{itemize}
-    \item \textbf{Swift}: Preferred for Safari App Extensions due to its deep integration with macOS and iOS.
-    \item \textbf{Python}: Used for scripting, automation, and backend tasks supporting the extension.
-\end{itemize}
-
-\subsection{Can Extensions Be Written Entirely in Python or C++?}
-Safari and Chrome extensions cannot be written entirely in Python or C++. These languages are not directly supported for building the core extension functionality, which requires HTML, CSS, JavaScript, and JSON. However, Python and C++ can complement extensions by:
-\begin{itemize}
-    \item \textbf{Python}: Automating workflows, generating configuration files like \texttt{manifest.json}, or serving as a backend for advanced data processing.
-    \item \textbf{C++}: Handling performance-intensive tasks by compiling into WebAssembly and integrating with JavaScript.
-\end{itemize}
-While these languages are invaluable for enhancing extensions, JavaScript remains essential for interacting with browsers.
+\subsection{Using Just Python or C++?}
+You can’t build the entire extension in these languages alone. Browsers expect HTML, CSS, JavaScript, and JSON. Python or C++ is best used on the side: generating config files or doing heavy lifting compiled to WebAssembly.
 
 \section{Pros and Cons of Key Languages}
-
-\begin{longtable}{|p{3cm}|p{5cm}|p{5cm}|}
-    \caption{Comparison of Languages Used in Safari Extensions}                                                                            \\
-    \hline
-    \textbf{Language/Tool} & \textbf{Pros}                                         & \textbf{Cons}                                         \\
-    \hline
-    \endfirsthead
-
-    \hline
-    \textbf{Language/Tool} & \textbf{Pros}                                         & \textbf{Cons}                                         \\
-    \hline
-    \endhead
-
-    \hline
-    \endfoot
-
-    \hline
-    \endlastfoot
-
-    \textbf{HTML}          & Universal and simple for defining UI structure        & Limited to static content                             \\
-    \hline
-    \textbf{CSS}           & Flexible for styling; works seamlessly with HTML      & Complex for dynamic designs                           \\
-    \hline
-    \textbf{JavaScript}    & Powerful for logic and browser APIs; widely supported & No static typing; prone to runtime errors             \\
-    \hline
-    \textbf{TypeScript}    & Enhances JavaScript with static typing                & Requires compilation to JavaScript                    \\
-    \hline
-    \textbf{WebAssembly}   & Native-like performance; ideal for heavy computation  & Steep learning curve; requires JavaScript integration \\
-    \hline
-    \textbf{Swift}         & Optimized for macOS/iOS; modern and safe              & Limited to Apple platforms                            \\
-    \hline
-    \textbf{Python}        & Excellent for scripting and backend services          & Not directly usable in Safari extensions              \\
-\end{longtable}
+\renewcommand{\arraystretch}{1.2}
+\begin{center}
+    \begin{tabular}{|m{3cm}|m{5cm}|m{5cm}|}
+        \hline
+        \textbf{Language} & \textbf{Pros}                      & \textbf{Cons}                  \\
+        \hline
+        HTML              & Universal layout                   & Static by itself               \\
+        \hline
+        CSS               & Powerful styling                   & Complex for large-scale design \\
+        \hline
+        JavaScript        & Widely supported, flexible         & No static typing by default    \\
+        \hline
+        TypeScript        & Type safety, large project scaling & Compiles to JavaScript         \\
+        \hline
+        WebAssembly       & Near-native speed                  & Requires JS integration        \\
+        \hline
+        Swift             & Deep Apple integration             & Apple-only                     \\
+        \hline
+        Python            & Great for scripting                & Not for the browser core       \\
+        \hline
+    \end{tabular}
+\end{center}
 
 \section{Accessing Websites and Data}
-Safari extensions can access websites and retrieve data using content scripts and browser APIs. Here are the key techniques:
-
 \subsection{Content Scripts}
-Content scripts allow your extension to interact with web pages. Use them to manipulate DOM elements or extract data.
+Content scripts run in the context of a webpage’s DOM.
 
-\begin{ExampleBox}[Example: Extracting Page Title]
-    \begin{verbatim}
-// content.js
-console.log("Page title is:", document.title);
-\end{verbatim}
-\end{ExampleBox}
-
-Add this to \texttt{manifest.json}:
-
-\begin{ExampleBox}[Example: Updating \texttt{manifest.json}]
-    \begin{verbatim}
-{
+\begin{minted}{json}
+{%
   "manifest_version": 2,
-  "name": "Website Data Access",
+  "name": "Content Script Example",
   "version": "1.0",
   "content_scripts": [
-    {
+    {%
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ]
 }
-\end{verbatim}
-\end{ExampleBox}
+\end{minted}
+
+\begin{minted}{javascript}
+// content.js
+console.log("Page title is:", document.title);
+\end{minted}
 
 \subsection{Browser APIs}
-Browser APIs provide advanced methods for accessing and managing data.
-\begin{itemize}
-    \item \textbf{\texttt{fetch()}}: Retrieve data from APIs or websites.
-    \item \textbf{\texttt{tabs}}: Access and manage browser tabs.
-\end{itemize}
+Use built-in APIs for data fetching or tab management:
 
-\begin{ExampleBox}[Example: Fetching Data from an API]
-    \begin{verbatim}
+\begin{minted}{javascript}
 fetch("https://api.example.com/data")
-  .then(response => response.json())
+  .then(r => r.json())
   .then(data => console.log(data))
-  .catch(error => console.error("Error fetching data:", error));
-\end{verbatim}
-\end{ExampleBox}
+  .catch(err => console.error("Fetch error:", err));
+\end{minted}
 
-\section{Integrating Python, Qt, and C++ with Extensions}
-While Safari and Chrome extensions do not directly support languages like Python, Qt, or C++, they can complement extension development in these ways:
+\section{Integrating Python, Qt, and C++}
+\subsection{Python for Scripting or Backend}
+You might fetch data or manipulate files:
 
-\subsection{Python}
-Python is ideal for automating tasks like generating files, testing extensions, or serving as a backend for advanced features.
-
-\begin{ExampleBox}[Example: Using Python to Fetch Data]
-    \begin{verbatim}
+\begin{minted}{python}
 import requests
 
-response = requests.get("https://api.example.com/data")
-if response.status_code == 200:
-    print(response.json())
+res = requests.get("https://api.example.com/data")
+if res.status_code == 200:
+    print(res.json())
 else:
-    print("Failed to fetch data")
-\end{verbatim}
-\end{ExampleBox}
+    print("Error fetching data")
+\end{minted}
 
-\subsection{Qt}
-Qt can create companion apps to manage extension configurations or display advanced data visualizations.
+\subsection{Qt for a Companion GUI}
+If you need a desktop app to configure your extension:
 
-\begin{ExampleBox}[Example: Qt GUI for Managing Extension Settings]
-    \begin{verbatim}
-from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
+\begin{minted}{python}
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QPushButton
+)
 
 app = QApplication([])
 window = QWidget()
@@ -221,53 +177,41 @@ button = QPushButton("Save Settings")
 layout.addWidget(button)
 
 window.setLayout(layout)
-window.setWindowTitle("Extension Manager")
 window.show()
 app.exec()
-\end{verbatim}
-\end{ExampleBox}
+\end{minted}
 
-\subsection{C++}
-C++ can optimize performance-critical tasks by compiling into WebAssembly and integrating with JavaScript.
+\subsection{C++ via WebAssembly for Performance}
+Compile C++ to Wasm and call it from JavaScript.
 
-\begin{ExampleBox}[Example: C++ to WebAssembly Integration]
-    \begin{verbatim}
+\begin{minted}{cpp}
 // mymodule.cpp
 #include <emscripten/emscripten.h>
 
-extern "C" {
-    EMSCRIPTEN_KEEPALIVE
-    int add(int a, int b) {
-        return a + b;
-    }
+extern "C" {%
+  EMSCRIPTEN_KEEPALIVE
+  int add(int a, int b) {%
+    return a + b;
+  }
 }
-\end{verbatim}
-\end{ExampleBox}
+\end{minted}
 
-Compile the code:
-
-\begin{ExampleBox}[Compiling C++ to WebAssembly]
-    \begin{verbatim}
+Compile:
+\begin{minted}{bash}
 emcc mymodule.cpp -o mymodule.wasm -s EXPORTED_FUNCTIONS='["_add"]'
-\end{verbatim}
-\end{ExampleBox}
+\end{minted}
 
-Use it in JavaScript:
-
-\begin{ExampleBox}[Example: Using C++ in JavaScript]
-    \begin{verbatim}
-fetch("mymodule.wasm").then(response =>
-    response.arrayBuffer()
-).then(bytes =>
-    WebAssembly.instantiate(bytes)
-).then(result => {
-    const add = result.instance.exports.add;
-    console.log(add(2, 3)); // Outputs: 5
-});
-\end{verbatim}
-\end{ExampleBox}
+Then use from JavaScript:
+\begin{minted}{javascript}
+fetch("mymodule.wasm")
+  .then(r => r.arrayBuffer())
+  .then(bytes => WebAssembly.instantiate(bytes))
+  .then(result => {%
+    console.log(result.instance.exports.add(2, 3));
+  });
+\end{minted}
 
 \section{Conclusion}
-Safari extensions and Chrome extensions share the WebExtensions API foundation. While Chrome extensions are cross-platform, Safari extensions emphasize macOS/iOS integration and privacy. Python, Qt, and C++ can greatly enhance Safari extension development by automating workflows, creating companion apps, or optimizing performance.
+Safari extensions rely on standard web technologies, but you can use other languages to streamline workflows or speed up certain tasks. Whether you automate files with Python or bring in C++ via WebAssembly, you can combine these tools to build powerful Safari extensions that go beyond simple front-end scripting.
 
 \end{document}

@@ -1,0 +1,16 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{PySide6}\PYG{n+nn}{.}\PYG{n+nn}{QtWidgets} \PYG{k+kn}{import} \PYG{p}{(}
+    \PYG{n}{QApplication}\PYG{p}{,} \PYG{n}{QWidget}\PYG{p}{,} \PYG{n}{QVBoxLayout}\PYG{p}{,} \PYG{n}{QPushButton}
+\PYG{p}{)}
+
+\PYG{n}{app} \PYG{o}{=} \PYG{n}{QApplication}\PYG{p}{(}\PYG{p}{[}\PYG{p}{]}\PYG{p}{)}
+\PYG{n}{window} \PYG{o}{=} \PYG{n}{QWidget}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{layout} \PYG{o}{=} \PYG{n}{QVBoxLayout}\PYG{p}{(}\PYG{p}{)}
+
+\PYG{n}{button} \PYG{o}{=} \PYG{n}{QPushButton}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Save Settings}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{layout}\PYG{o}{.}\PYG{n}{addWidget}\PYG{p}{(}\PYG{n}{button}\PYG{p}{)}
+
+\PYG{n}{window}\PYG{o}{.}\PYG{n}{setLayout}\PYG{p}{(}\PYG{n}{layout}\PYG{p}{)}
+\PYG{n}{window}\PYG{o}{.}\PYG{n}{show}\PYG{p}{(}\PYG{p}{)}
+\PYG{n}{app}\PYG{o}{.}\PYG{n}{exec}\PYG{p}{(}\PYG{p}{)}
+\end{MintedVerbatim}

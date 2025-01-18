@@ -7,7 +7,7 @@
 \usepackage{tocloft}
 
 % Define JavaScript and Rust languages for listings
-\lstdefinelanguage{JavaScript}{
+\lstdefinelanguage{JavaScript}{%
     keywords={const, let, var, function, if, else, return, for, while},
     sensitive=true,
     morecomment=[l]{//},
@@ -16,7 +16,7 @@
     morestring=[b]'
 }
 
-\lstdefinelanguage{Rust}{
+\lstdefinelanguage{Rust}{%
     keywords={fn, let, mut, pub, impl, use, mod, crate, for, while, if, else, loop},
     sensitive=true,
     morecomment=[l]{//},
@@ -26,7 +26,7 @@
 }
 
 % Enhanced Code listing style
-\lstset{
+\lstset{%
     basicstyle=\ttfamily\small,
     keywordstyle=\color{blue}\bfseries,
     stringstyle=\color{red},
@@ -57,18 +57,18 @@
 
 \section*{Table of Contents}
 \begin{enumerate}
-  \item Python
-  \item C++
-  \item Zsh
-  \item Bash
-  \item JavaScript (Node.js)
-  \item Rust
-  \item Zig
-  \item Go
-  \item C\#
-  \item Java
-  \item Ruby
-  \item PHP
+    \item Python
+    \item C++
+    \item Zsh
+    \item Bash
+    \item JavaScript (Node.js)
+    \item Rust
+    \item Zig
+    \item Go
+    \item C\#
+    \item Java
+    \item Ruby
+    \item PHP
 \end{enumerate}
 
 \newpage
@@ -98,8 +98,8 @@ for path in Path("/path/to/directory").rglob("*"):
 #include <filesystem>
 namespace fs = std::filesystem;
 
-int main() {
-    for (const auto& entry : fs::recursive_directory_iterator("/path/to/directory")) {
+int main() {%
+    for (const auto& entry : fs::recursive_directory_iterator("/path/to/directory")) {%
         std::cout << entry.path() << std::endl;
     }
     return 0;
@@ -123,7 +123,7 @@ done
 
 \subsection{Using Built-in Functions}
 \begin{lstlisting}
-walk_tree() {
+walk_tree() {%
   local dir=$1
   for file in $dir/**/*; do
     [[ -f $file ]] && echo "File: $file"
@@ -144,12 +144,12 @@ find /path/to/directory -type f -print
 const fs = require('fs');
 const path = require('path');
 
-function walk(dir) {
-    fs.readdirSync(dir).forEach(file => {
+function walk(dir) {%
+    fs.readdirSync(dir).forEach(file => {%
         const fullPath = path.join(dir, file);
-        if (fs.statSync(fullPath).isDirectory()) {
+        if (fs.statSync(fullPath).isDirectory()) {%
             walk(fullPath);
-        } else {
+        } else {%
             console.log(fullPath);
         }
     });
@@ -162,8 +162,8 @@ walk('/path/to/directory');
 \begin{lstlisting}[language=Rust]
 use walkdir::WalkDir;
 
-fn main() {
-    for entry in WalkDir::new("/path/to/directory") {
+fn main() {%
+    for entry in WalkDir::new("/path/to/directory") {%
         let entry = entry.unwrap();
         println!("{}", entry.path().display());
     }
@@ -174,13 +174,13 @@ fn main() {
 \begin{lstlisting}
 const std = @import("std");
 
-pub fn main() !void {
+pub fn main() !void {%
     const cwd = try std.fs.cwd();
     var it = try cwd.walk("/path/to/directory", .{});
-    while (try it.next()) |entry| {
-        if (entry.kind == .File) {
+    while (try it.next()) |entry| {%
+        if (entry.kind == .File) {%
             std.debug.print("File: {s}\n", .{entry.path});
-        } else if (entry.kind == .Directory) {
+        } else if (entry.kind == .Directory) {%
             std.debug.print("Directory: {s}\n", .{entry.path});
         }
     }
@@ -197,16 +197,16 @@ import (
 	"path/filepath"
 )
 
-func main() {
+func main() {%
 	root := "/path/to/directory"
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {%
+		if err != nil {%
 			return err
 		}
 		fmt.Println(path)
 		return nil
 	})
-	if err != nil {
+	if err != nil {%
 		fmt.Println("Error:", err)
 	}
 }
@@ -218,9 +218,9 @@ func main() {
 using System;
 using System.IO;
 
-class Program {
-    static void Main() {
-        foreach (string file in Directory.GetFiles("/path/to/directory", "*", SearchOption.AllDirectories)) {
+class Program {%
+    static void Main() {%
+        foreach (string file in Directory.GetFiles("/path/to/directory", "*", SearchOption.AllDirectories)) {%
             Console.WriteLine(file);
         }
     }
@@ -232,8 +232,8 @@ class Program {
 import java.nio.file.*;
 import java.io.IOException;
 
-public class FileTreeWalk {
-    public static void main(String[] args) throws IOException {
+public class FileTreeWalk {%
+    public static void main(String[] args) throws IOException {%
         Path path = Paths.get("/path/to/directory");
         Files.walk(path).forEach(System.out::println);
     }
@@ -261,7 +261,7 @@ end
 \begin{lstlisting}[language=PHP]
 <?php
 $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('/path/to/directory'));
-foreach ($iterator as $file) {
+foreach ($iterator as $file) {%
     echo $file . PHP_EOL;
 }
 ?>
