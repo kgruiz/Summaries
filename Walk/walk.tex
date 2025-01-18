@@ -1,0 +1,270 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{tocloft}
+
+% Define JavaScript and Rust languages for listings
+\lstdefinelanguage{JavaScript}{
+    keywords={const, let, var, function, if, else, return, for, while},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]",
+    morestring=[b]'
+}
+
+\lstdefinelanguage{Rust}{
+    keywords={fn, let, mut, pub, impl, use, mod, crate, for, while, if, else, loop},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]",
+    morestring=[b]'
+}
+
+% Enhanced Code listing style
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    framesep=5pt,
+    rulecolor=\color{black},
+    backgroundcolor=\color{lightgray!10},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1
+}
+
+% Section formatting
+\titleformat{\section}{\bfseries\Large\sffamily\color{blue}}{}{0em}{}
+\titleformat{\subsection}{\bfseries\large\sffamily\color{teal}}{}{0em}{}
+\titleformat{\subsubsection}{\bfseries\normalsize\sffamily\color{purple}}{}{0em}{}
+
+\title{Walking a File Tree in Popular Languages}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Table of Contents}
+\begin{enumerate}
+  \item Python
+  \item C++
+  \item Zsh
+  \item Bash
+  \item JavaScript (Node.js)
+  \item Rust
+  \item Zig
+  \item Go
+  \item C\#
+  \item Java
+  \item Ruby
+  \item PHP
+\end{enumerate}
+
+\newpage
+
+\section{Python}
+\subsection{Using \texttt{os.walk}}
+\begin{lstlisting}[language=Python]
+import os
+
+for root, dirs, files in os.walk("/path/to/directory"):
+    print(f"Directory: {root}")
+    print(f"Subdirectories: {dirs}")
+    print(f"Files: {files}")
+\end{lstlisting}
+
+\subsection{Using \texttt{pathlib}}
+\begin{lstlisting}[language=Python]
+from pathlib import Path
+
+for path in Path("/path/to/directory").rglob("*"):
+    print(path)
+\end{lstlisting}
+
+\section{C++}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <filesystem>
+namespace fs = std::filesystem;
+
+int main() {
+    for (const auto& entry : fs::recursive_directory_iterator("/path/to/directory")) {
+        std::cout << entry.path() << std::endl;
+    }
+    return 0;
+}
+\end{lstlisting}
+
+\section{Zsh}
+\subsection{Recursive Globbing with \texttt{**}}
+\begin{lstlisting}
+for file in /path/to/directory/**/*; do
+  echo $file
+done
+\end{lstlisting}
+
+\subsection{Using \texttt{find}}
+\begin{lstlisting}
+for file in $(find /path/to/directory -type f); do
+  echo $file
+done
+\end{lstlisting}
+
+\subsection{Using Built-in Functions}
+\begin{lstlisting}
+walk_tree() {
+  local dir=$1
+  for file in $dir/**/*; do
+    [[ -f $file ]] && echo "File: $file"
+    [[ -d $file ]] && echo "Directory: $file"
+  done
+}
+
+walk_tree /path/to/directory
+\end{lstlisting}
+
+\section{Bash}
+\begin{lstlisting}
+find /path/to/directory -type f -print
+\end{lstlisting}
+
+\section{JavaScript (Node.js)}
+\begin{lstlisting}[language=JavaScript]
+const fs = require('fs');
+const path = require('path');
+
+function walk(dir) {
+    fs.readdirSync(dir).forEach(file => {
+        const fullPath = path.join(dir, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            walk(fullPath);
+        } else {
+            console.log(fullPath);
+        }
+    });
+}
+
+walk('/path/to/directory');
+\end{lstlisting}
+
+\section{Rust}
+\begin{lstlisting}[language=Rust]
+use walkdir::WalkDir;
+
+fn main() {
+    for entry in WalkDir::new("/path/to/directory") {
+        let entry = entry.unwrap();
+        println!("{}", entry.path().display());
+    }
+}
+\end{lstlisting}
+
+\section{Zig}
+\begin{lstlisting}
+const std = @import("std");
+
+pub fn main() !void {
+    const cwd = try std.fs.cwd();
+    var it = try cwd.walk("/path/to/directory", .{});
+    while (try it.next()) |entry| {
+        if (entry.kind == .File) {
+            std.debug.print("File: {s}\n", .{entry.path});
+        } else if (entry.kind == .Directory) {
+            std.debug.print("Directory: {s}\n", .{entry.path});
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Go}
+\begin{lstlisting}[language=Go]
+package main
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
+func main() {
+	root := "/path/to/directory"
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		fmt.Println(path)
+		return nil
+	})
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+}
+\end{lstlisting}
+
+\section{C\#}
+\subsection{Using \texttt{Directory.GetFiles}}
+\begin{lstlisting}[language=C]
+using System;
+using System.IO;
+
+class Program {
+    static void Main() {
+        foreach (string file in Directory.GetFiles("/path/to/directory", "*", SearchOption.AllDirectories)) {
+            Console.WriteLine(file);
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Java}
+\begin{lstlisting}[language=Java]
+import java.nio.file.*;
+import java.io.IOException;
+
+public class FileTreeWalk {
+    public static void main(String[] args) throws IOException {
+        Path path = Paths.get("/path/to/directory");
+        Files.walk(path).forEach(System.out::println);
+    }
+}
+\end{lstlisting}
+
+\section{Ruby}
+\subsection{Using \texttt{Dir.glob}}
+\begin{lstlisting}[language=Ruby]
+Dir.glob("/path/to/directory/**/*").each do |file|
+  puts file
+end
+\end{lstlisting}
+
+\subsection{Using \texttt{Find}}
+\begin{lstlisting}[language=Ruby]
+require 'find'
+
+Find.find('/path/to/directory') do |path|
+  puts path
+end
+\end{lstlisting}
+
+\section{PHP}
+\begin{lstlisting}[language=PHP]
+<?php
+$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('/path/to/directory'));
+foreach ($iterator as $file) {
+    echo $file . PHP_EOL;
+}
+?>
+\end{lstlisting}
+
+\end{document}
