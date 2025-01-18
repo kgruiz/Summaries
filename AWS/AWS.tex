@@ -1,100 +1,148 @@
-\documentclass[11pt]{article}
+\documentclass[12pt]{article}
 
 %--------------------------------------------------------------------
-% Package Imports & Configuration
+% PAGE & FONT SETUP
 %--------------------------------------------------------------------
-\usepackage[margin=1in]{geometry}          % Page margins
-\usepackage[T1]{fontenc}                  % Output font encoding
-\usepackage{lmodern}                      % Latin Modern for a modern look
-\usepackage{hyperref}                     % Hyperlinks in PDF
-\usepackage{xcolor}                       % Colors for text, boxes, and TikZ
-\usepackage{tikz}                         % TikZ for diagrams
-\usetikzlibrary{shapes,arrows,positioning,calc,arrows.meta,shapes.misc}
-  % Removed 'cloud' library since it doesn't exist in all distributions.
-  % 'shapes.misc' includes the 'cloud' shape.
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{lmodern}         % Clean, modern font
+\usepackage{ragged2e}        % Better text justification
+\setlength{\parskip}{6pt}    % Space between paragraphs
+\setlength{\parindent}{0pt}  % No paragraph indent
 
-% We use minted for highlighted code. Requires --shell-escape to compile.
+%--------------------------------------------------------------------
+% COLORS & SECTION STYLING
+%--------------------------------------------------------------------
+\usepackage{xcolor}
+\usepackage{sectsty}
+\usepackage{titlesec}
+
+% A cohesive, modern color palette:
+\definecolor{mainDark}{HTML}{2C3E50}  % Deep blue-gray
+\definecolor{mainLight}{HTML}{ECF0F1} % Light gray background
+\definecolor{accentColor}{HTML}{3498DB} % Soft blue accent
+\definecolor{boxBg}{HTML}{F8F9FA}    % Slightly off-white box background
+
+% Section title color & spacing
+\sectionfont{\color{mainDark}\huge}
+\subsectionfont{\color{mainDark}\Large}
+\subsubsectionfont{\color{mainDark}\large}
+
+% Customize section title spacing
+\titlespacing*{\section}{0pt}{0.8em}{0.5em}
+\titlespacing*{\subsection}{0pt}{0.7em}{0.4em}
+
+%--------------------------------------------------------------------
+% HYPERLINKS
+%--------------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accentColor,
+  urlcolor=accentColor
+}
+
+%--------------------------------------------------------------------
+% CODE LISTINGS (MINTED)
+%--------------------------------------------------------------------
 \usepackage{minted}
-
-% A bit of extra vertical space between paragraphs for readability:
-\setlength{\parskip}{6pt}
-\setlength{\parindent}{0pt}
+\usemintedstyle{friendly} % Colorful, easy-to-read code style
 
 %--------------------------------------------------------------------
-% Custom TikZ Styles
+% TIKZ FOR DIAGRAMS
 %--------------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,arrows.meta,shapes.misc}
+
+% Our custom TikZ styles, updated to match the new palette:
 \tikzset{
   serviceBox/.style={
     rectangle,
     rounded corners,
-    draw=black,
-    fill=blue!10,
-    text width=3.2cm,
-    minimum height=1.3cm,
+    draw=mainDark,
+    fill=boxBg,
+    text width=2.8cm,
+    minimum height=1.2cm,
     align=center
   },
   arrowLine/.style={
     -{Latex[length=3mm,width=2mm]},
-    thick
+    thick,
+    color=mainDark
   },
   cloudService/.style={
     cloud,
-    draw=black,
-    fill=blue!10,
+    draw=mainDark,
+    fill=boxBg,
     cloud puffs=15,
     cloud puff arc=120,
     aspect=2,
-    minimum width=2.8cm,
+    minimum width=2.4cm,
     align=center
   },
   database/.style={
     cylinder,
     cylinder uses custom fill,
-    cylinder body fill=blue!10,
-    cylinder end fill=blue!10,
-    draw=black,
+    cylinder body fill=boxBg,
+    cylinder end fill=boxBg,
+    draw=mainDark,
     shape aspect=0.7,
     minimum height=2.2cm,
     minimum width=1.4cm,
     align=center
   },
   userFigure/.style={
-    draw,
-    fill=green!10,
+    rectangle,
     rounded corners,
-    text width=2.8cm,
-    minimum height=1.2cm,
+    draw=mainDark,
+    fill=green!15,
+    text width=2.5cm,
+    minimum height=1.1cm,
     align=center
   }
 }
 
 %--------------------------------------------------------------------
-% Title and Meta Info
+% TITLE
 %--------------------------------------------------------------------
-\title{\textbf{A Simple, Visual Introduction to AWS}\\ \large (Improved Edition)}
+\title{
+  \vspace{-1.5cm}
+  \color{mainDark}\Huge A Modern, Visual Introduction to AWS \\
+  \vspace{0.1cm}
+  \large \textit{(Beginner-Friendly Edition)}
+}
 \author{}
-\date{\today}
+\date{}
 
 \begin{document}
 \maketitle
 
+\thispagestyle{empty}
+\vfill
+\begin{center}
+    \textit{\color{mainDark}
+        This guide introduces core AWS concepts using diagrams and
+        straightforward explanations. Ideal for newcomers seeking a
+        quick yet clear jump into cloud computing.
+    }
+\end{center}
+\vfill
+\clearpage
+
+%--------------------------------------------------------------------
+% TABLE OF CONTENTS
+%--------------------------------------------------------------------
 \tableofcontents
-\vspace{1cm}
+\clearpage
 
 %--------------------------------------------------------------------
 % INTRO
 %--------------------------------------------------------------------
 \section*{Introduction}
 \addcontentsline{toc}{section}{Introduction}
+\justifying
 
-This updated document aims to give newcomers an easy-to-follow, visually guided introduction to \textbf{Amazon Web Services (AWS)}. Whether you're building a small personal project or diving into large-scale deployments, AWS offers a wide range of services to help you succeed. This guide focuses on:
-
-\begin{itemize}
-    \item \textbf{What AWS is and why it matters}
-    \item \textbf{Common use cases in the real world}
-    \item \textbf{Step-by-step learning projects}
-    \item \textbf{Many diagrams to illustrate core concepts}
-\end{itemize}
+\textbf{Amazon Web Services (AWS)} makes it easy to “rent” computing resources over the internet. Rather than buying and maintaining physical servers, you pay only for what you use. This document focuses on the essential building blocks of AWS, shown with easy-to-follow diagrams, so that by the end, you’ll have a clear picture of how to start.
 
 \clearpage
 
@@ -102,52 +150,49 @@ This updated document aims to give newcomers an easy-to-follow, visually guided 
 % 1. WHAT IS AWS?
 %--------------------------------------------------------------------
 \section{What is AWS?}
+\justifying
 
-\subsection{Definition}
-\textbf{Amazon Web Services (AWS)} is a cloud computing platform that lets you:
-
+\subsection{High-Level Definition}
+AWS is a \textbf{cloud computing} platform from Amazon. You can:
 \begin{itemize}
-    \item Rent computing resources on-demand
-    \item Store, process, and analyze data
-    \item Host and scale applications globally
+    \item \textbf{Store data} (files, images, backups) reliably.
+    \item \textbf{Run applications} (web, mobile, API services).
+    \item \textbf{Analyze data and use AI} without building physical servers.
 \end{itemize}
 
-\vspace{2pt}
-\textbf{Key Benefits:}
+\textbf{Key Benefits}:
 \begin{itemize}
-    \item \textbf{Pay-As-You-Go}: Only pay for the resources you actually use.
-    \item \textbf{Scalability}: Effortlessly adjust capacity based on real-time traffic.
-    \item \textbf{Global Infrastructure}: Deploy and deliver content across multiple regions worldwide.
+    \item \textbf{Pay-As-You-Go}: No big upfront server costs.
+    \item \textbf{Scalable}: Quickly handle growth (or traffic spikes).
+    \item \textbf{Global Reach}: Deploy in many geographical regions.
 \end{itemize}
 
-\subsection{Service Categories}
-AWS is large, but it helps to see services grouped by functionality:
-
+\subsection{Core Service Areas}
 \begin{itemize}
-    \item \textbf{Compute}: EC2 (virtual servers), Lambda (serverless)
-    \item \textbf{Storage}: S3 (object storage), EBS (block storage)
-    \item \textbf{Database}: RDS (relational), DynamoDB (NoSQL)
-    \item \textbf{Networking}: VPC, CloudFront (CDN)
-    \item \textbf{Analytics}: Kinesis, Athena
-    \item \textbf{Machine Learning}: SageMaker
+    \item \textbf{Compute}: EC2 (virtual servers), Lambda (serverless).
+    \item \textbf{Storage}: S3 (object storage), EBS (attachable storage).
+    \item \textbf{Databases}: RDS (relational), DynamoDB (NoSQL).
+    \item \textbf{Networking}: VPC (private networks), CloudFront (CDN).
+    \item \textbf{Analytics}: Kinesis (stream data), Athena (SQL on S3).
+    \item \textbf{Machine Learning}: SageMaker (train, deploy ML models).
 \end{itemize}
 
-\subsection{High-Level Visualization}
-
+\subsection{Visual Overview}
 \begin{center}
-    \begin{tikzpicture}[
-            node distance=2.3cm,
-            every node/.style={font=\small}
-        ]
-        \node[serviceBox] (compute) {Compute\\(EC2, Lambda)};
-        \node[serviceBox, right=1.5cm of compute] (storage) {Storage\\(S3, EBS)};
-        \node[serviceBox, right=1.5cm of storage] (db) {Databases\\(RDS, DynamoDB)};
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[
+                node distance=2.1cm,
+                every node/.style={font=\small}
+            ]
+            \node[serviceBox] (compute) {Compute\\(EC2, Lambda)};
+            \node[serviceBox, right=1.2cm of compute] (storage) {Storage\\(S3, EBS)};
+            \node[serviceBox, right=1.2cm of storage] (db) {Databases\\(RDS, DynamoDB)};
 
-        \node[serviceBox, below=1.8cm of compute] (network) {Networking\\(VPC, CloudFront)};
-        \node[serviceBox, right=1.5cm of network] (analytics) {Analytics\\(Kinesis, Athena)};
-        \node[serviceBox, right=1.5cm of analytics] (ml) {Machine Learning\\(SageMaker)};
-
-    \end{tikzpicture}
+            \node[serviceBox, below=1.5cm of compute] (network) {Networking\\(VPC, CloudFront)};
+            \node[serviceBox, right=1.2cm of network] (analytics) {Analytics\\(Kinesis, Athena)};
+            \node[serviceBox, right=1.2cm of analytics] (ml) {ML\\(SageMaker)};
+        \end{tikzpicture}
+    }
 \end{center}
 
 \clearpage
@@ -156,75 +201,40 @@ AWS is large, but it helps to see services grouped by functionality:
 % 2. HOW COMPANIES USE AWS
 %--------------------------------------------------------------------
 \section{How Companies Use AWS}
+\justifying
 
 \subsection{Web Hosting}
-Many companies host their websites or web applications on AWS. Options range from:
+Companies host static or dynamic websites on AWS. For example:
 \begin{itemize}
-    \item \textbf{Static sites}: Simple S3 + CloudFront setup
-    \item \textbf{Dynamic sites}: EC2-based servers or container services (ECS, EKS)
+    \item \textbf{Static content} on S3 + CloudFront
+    \item \textbf{Dynamic apps} running on EC2 or containers
 \end{itemize}
 
-\subsubsection{Example: Static Hosting with S3 and CloudFront}
-
+\vspace{-0.3cm}
+\subsubsection{Static Site with S3 \& CloudFront}
 \begin{center}
-    \begin{tikzpicture}[node distance=2.5cm]
-        \node[userFigure] (user) {User (Browser)};
-        \node[serviceBox, right=3.0cm of user] (cloudfront) {CloudFront};
-        \node[cloudService, right=3.0cm of cloudfront] (s3) {S3 Bucket};
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.5cm]
+            \node[userFigure] (user) {User (Browser)};
+            \node[serviceBox, right=2.5cm of user] (cloudfront) {CloudFront};
+            \node[cloudService, right=2.5cm of cloudfront] (s3) {S3 Bucket};
 
-        \draw[arrowLine] (user) -- node[above]{\scriptsize HTTP/HTTPS} (cloudfront);
-        \draw[arrowLine] (cloudfront) -- node[above]{\scriptsize Fetch Static Assets} (s3);
-
-    \end{tikzpicture}
+            \draw[arrowLine] (user) -- node[above]{\scriptsize HTTP/HTTPS} (cloudfront);
+            \draw[arrowLine] (cloudfront) -- node[above]{\scriptsize Fetch Files} (s3);
+        \end{tikzpicture}
+    }
 \end{center}
 
-\subsection{Data Storage and Backup}
-Many organizations use \textbf{Amazon S3} for storing large files, media, or backups. It’s highly durable (99.999999999\% durability) and integrates well with other AWS services.
+\subsection{Data Storage \& Backup}
+\textbf{S3} is popular for storing large volumes of files (images, backups, logs) with high durability.
 
-\begin{center}
-    \begin{tikzpicture}[node distance=2.2cm]
-        \node[userFigure] (app) {Application or Data Source};
-        \node[cloudService, right=3cm of app] (s3) {S3 Bucket};
-
-        \draw[arrowLine] (app) -- node[above]{\scriptsize Upload Files} (s3);
-    \end{tikzpicture}
-\end{center}
-
-\subsection{Application Development and Deployment}
-AWS supports various application architectures, from traditional server-based (EC2) to fully \textbf{serverless} (Lambda). Developers often use:
+\subsection{Application Development}
+Developers run code on:
 \begin{itemize}
-    \item \textbf{API Gateway} to create REST or WebSocket APIs
-    \item \textbf{Lambda} to run code without provisioning servers
-    \item \textbf{DynamoDB} or \textbf{RDS} as the database layer
+    \item \textbf{EC2} (full server control)
+    \item \textbf{Lambda} (serverless, event-based)
 \end{itemize}
-
-\begin{center}
-    \begin{tikzpicture}[node distance=2.3cm]
-        \node[userFigure] (client) {User / Client};
-        \node[serviceBox, right=2.5cm of client] (apiGW) {API Gateway};
-        \node[serviceBox, right=2.5cm of apiGW] (lambda) {Lambda};
-        \node[database, right=2.5cm of lambda] (ddb) {DynamoDB};
-
-        \draw[arrowLine] (client) -- node[above]{\scriptsize REST Request} (apiGW);
-        \draw[arrowLine] (apiGW) -- node[above]{\scriptsize Invoke} (lambda);
-        \draw[arrowLine] (lambda) -- node[above]{\scriptsize Read/Write} (ddb);
-    \end{tikzpicture}
-\end{center}
-
-\subsection{Machine Learning}
-AWS offers \textbf{SageMaker} to simplify building, training, and deploying ML models. Common workflow:
-\begin{itemize}
-    \item Store dataset in S3
-    \item Train model in SageMaker
-    \item Deploy model endpoint
-\end{itemize}
-
-\subsection{Analytics}
-Analyze large volumes of data or real-time streams:
-\begin{itemize}
-    \item \textbf{Kinesis} for real-time data ingestion
-    \item \textbf{Athena} to query S3 data with standard SQL
-\end{itemize}
+And store data in \textbf{RDS} or \textbf{DynamoDB}.
 
 \clearpage
 
@@ -232,72 +242,66 @@ Analyze large volumes of data or real-time streams:
 % 3. HOW YOU CAN USE AWS
 %--------------------------------------------------------------------
 \section{How You Can Use AWS}
+\justifying
 
-\subsection{Starting Small}
-Even beginners can build:
-\begin{itemize}
-    \item \textbf{Static portfolio site}: Hosted on S3 + CloudFront
-    \item \textbf{File processor}: Upload an image to S3, resize it using Lambda, and store the result
-\end{itemize}
+\subsection{Start Small}
+Try hosting a simple \textbf{static site on S3} or building a \textbf{file processor} where uploading an image to S3 triggers \textbf{Lambda} to resize it.
 
-\subsection{Workflow Automation}
-AWS excels at \textbf{event-driven} workflows:
+\subsection{Automate with Events}
+Whenever a new file arrives in S3, a Lambda function can process it and then store metadata in a database.
+
 \begin{center}
-    \begin{tikzpicture}[node distance=3.0cm]
-        \node[userFigure] (upload) {User Upload};
-        \node[cloudService, right=3cm of upload] (s3) {S3};
-        \node[serviceBox, right=3cm of s3] (lambda) {Lambda};
-        \node[serviceBox, right=3cm of lambda] (ddb) {DynamoDB};
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.2cm]
+            \node[userFigure] (upload) {User Upload};
+            \node[cloudService, right=2.5cm of upload] (s3) {S3};
+            \node[serviceBox, right=2.5cm of s3] (lambda) {Lambda};
+            \node[database, right=2.5cm of lambda] (ddb) {DynamoDB};
 
-        \draw[arrowLine] (upload) -- node[above]{\scriptsize File} (s3);
-        \draw[arrowLine] (s3) -- node[above]{\scriptsize Trigger} (lambda);
-        \draw[arrowLine] (lambda) -- node[above]{\scriptsize Store Metadata} (ddb);
-    \end{tikzpicture}
+            \draw[arrowLine] (upload) -- node[above]{\scriptsize File} (s3);
+            \draw[arrowLine] (s3) -- node[above]{\scriptsize Trigger} (lambda);
+            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Store Info} (ddb);
+        \end{tikzpicture}
+    }
 \end{center}
 
-\subsection{Monitoring and Logging}
-\textbf{CloudWatch} collects logs from your AWS resources, provides metrics, and can trigger alarms or scaling actions when thresholds are met.
+\subsection{Monitoring with CloudWatch}
+\textbf{CloudWatch} gathers logs and metrics from your AWS resources. It can trigger alarms if your app needs scaling or if there’s an error spike.
 
 \begin{center}
-    \begin{tikzpicture}[node distance=2.2cm]
-        \node[serviceBox] (resource) {EC2 / Lambda};
-        \node[serviceBox, right=3cm of resource] (cw) {CloudWatch};
+    \resizebox{0.9\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.2cm]
+            \node[serviceBox] (instances) {EC2/Lambda};
+            \node[serviceBox, right=2.5cm of instances] (cw) {CloudWatch};
 
-        \draw[arrowLine] (resource) -- node[above]{\scriptsize Logs \& Metrics} (cw);
+            \draw[arrowLine] (instances) -- node[above]{\scriptsize Logs/Metrics} (cw);
 
-        \node[serviceBox, below=1.5cm of cw] (scale) {Auto-Scaling / Alert};
-        \draw[arrowLine] (cw) -- node[right]{\scriptsize Alarm} (scale);
-    \end{tikzpicture}
+            \node[serviceBox, below=1.5cm of cw] (alert) {Alerts/Scaling};
+            \draw[arrowLine] (cw) -- node[right]{\scriptsize Alarm} (alert);
+
+        \end{tikzpicture}
+    }
 \end{center}
 
 \clearpage
 
 %--------------------------------------------------------------------
-% 4. KEY AWS SERVICES
+% 4. KEY AWS SERVICES (SIMPLIFIED)
 %--------------------------------------------------------------------
-\section{Key AWS Services (Simplified Overview)}
+\section{Key AWS Services (Simplified)}
+\justifying
 
 \subsection{S3 (Object Storage)}
-A scalable, secure, and cost-effective way to store large quantities of files.
-\begin{center}
-    \begin{tikzpicture}[node distance=2.5cm]
-        \node[userFigure] (source) {Application};
-        \node[cloudService, right=3cm of source] (s3b) {S3 Bucket};
-
-        \draw[arrowLine] (source) -- node[above]{\scriptsize Upload / Download} (s3b);
-    \end{tikzpicture}
-\end{center}
+Save files in “buckets.” Scalability and durability are built in.
 
 \subsection{Lambda (Serverless Compute)}
-Write code functions that respond to events (e.g., S3 uploads, API Gateway calls). No need to manage servers.
+Run code without managing servers. Write a function that triggers on events:
 
 \begin{minted}[fontsize=\small, frame=single]{python}
 def ProcessFile(event, context):
     S3_BUCKET_NAME = "my-bucket"
     fileKey = event["Records"][0]["s3"]["object"]["key"]
-
-    # ... do something interesting here ...
-
+    # ... do something ...
     return {
         "statusCode": 200,
         "body": "Processing complete"
@@ -305,150 +309,113 @@ def ProcessFile(event, context):
 \end{minted}
 
 \subsection{DynamoDB (NoSQL)}
-Key-value store optimized for performance and scalability. Excellent choice for user profiles, session data, or IoT data.
+A high-performance, key-value database. Great for session data, user profiles, or IoT data.
 
 \subsection{EC2 (Virtual Servers)}
-Allows you to rent and configure virtual machines. Ideal if you need complete control over the OS and software environment.
+Manage your own virtual machines on AWS. Suitable for custom OS-level setups.
 
 \subsection{CloudFront (CDN)}
-A global content delivery network that caches and delivers content (static or dynamic) from edge locations near your users.
+Distribute content (images, videos, etc.) via a global network of edge locations, speeding up delivery.
 
 \clearpage
 
 %--------------------------------------------------------------------
-% 5. SUGGESTED PROJECTS
+% 5. HANDS-ON PROJECT IDEAS
 %--------------------------------------------------------------------
-\section{Suggested Projects for Hands-On Learning}
+\section{Hands-On Project Ideas}
+\justifying
 
-\subsection{Beginner Level}
-\textbf{1. Static Website}
-\begin{itemize}
-    \item Host a personal resume or portfolio on S3
-    \item Use CloudFront to speed up global delivery
-\end{itemize}
+\subsection{Beginner}
+\textbf{Static Website}: Host a personal portfolio on S3. Use CloudFront for global speed.
+\textbf{File Processor}: Upload an image, trigger Lambda to transform it, store output in another S3 bucket.
 
-\textbf{2. File Processor with Lambda and S3}
-\begin{itemize}
-    \item Upload an image to S3
-    \item Lambda automatically resizes/optimizes the image
-    \item Outputs to another S3 bucket or the same bucket
-\end{itemize}
+\subsection{Intermediate}
+\textbf{Web App (EC2 + RDS + S3)}: Backend on EC2, relational data in RDS, static files on S3.
+\textbf{Serverless API (API Gateway + Lambda + DynamoDB)}: Create a REST or GraphQL endpoint without managing servers.
 
-\subsection{Intermediate Level}
-\textbf{1. Web App with EC2, RDS, and S3}
-\begin{itemize}
-    \item EC2: runs your backend
-    \item RDS: relational database
-    \item S3: static images or media
-\end{itemize}
+\subsection{Advanced}
+\textbf{Real-Time Data (Kinesis + Lambda + DynamoDB)}: Stream data into Kinesis, process with Lambda, store results.
+\textbf{Machine Learning (SageMaker + S3)}: Train a model with S3 data, deploy it for real-time predictions.
 
-\textbf{2. Serverless API (API Gateway + Lambda + DynamoDB)}
-Create a REST or GraphQL API. Lambda handles business logic; DynamoDB stores the data.
+\clearpage
 
-\subsection{Advanced Level}
-\textbf{1. Real-Time Data (Kinesis + Lambda + DynamoDB)}
-\begin{itemize}
-    \item Kinesis streams incoming data
-    \item Lambda processes records in near real time
-    \item DynamoDB stores aggregated or processed data
-\end{itemize}
+%--------------------------------------------------------------------
+% 6. EXTRA VISUALS
+%--------------------------------------------------------------------
+\section{Extra Visuals}
+\justifying
 
-\textbf{2. Machine Learning (SageMaker + S3 + Lambda)}
-\begin{itemize}
-    \item S3 for training data
-    \item SageMaker to train and host the model
-    \item Lambda or a web app calls the deployed model endpoint
-\end{itemize}
-
+\subsection{A Typical Serverless Architecture}
 \begin{center}
-    \begin{tikzpicture}[node distance=2.5cm]
-        \node[userFigure] (source) {Stream Source};
-        \node[serviceBox, right=3cm of source] (kinesis) {Kinesis};
-        \node[serviceBox, right=3cm of kinesis] (lambda) {Lambda};
-        \node[serviceBox, right=3cm of lambda] (ddb) {DynamoDB};
+    \resizebox{\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.2cm]
+            \node[userFigure] (user) {User/Client};
+            \node[serviceBox, right=2.5cm of user] (apiGW) {API Gateway};
+            \node[serviceBox, right=2.5cm of apiGW] (lambda) {Lambda};
+            \node[database, right=2.5cm of lambda] (database) {DynamoDB};
 
-        \draw[arrowLine] (source) -- node[above]{\scriptsize Data Stream} (kinesis);
-        \draw[arrowLine] (kinesis) -- node[above]{\scriptsize Trigger} (lambda);
-        \draw[arrowLine] (lambda) -- node[above]{\scriptsize Save / Update} (ddb);
-    \end{tikzpicture}
+            \draw[arrowLine] (user) -- node[above]{\scriptsize HTTP Request} (apiGW);
+            \draw[arrowLine] (apiGW) -- node[above]{\scriptsize Invoke} (lambda);
+            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Query/Store} (database);
+        \end{tikzpicture}
+    }
+\end{center}
+
+\subsection{Monitoring Loop}
+\begin{center}
+    \resizebox{0.8\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.2cm]
+            \node[serviceBox] (instances) {EC2 / Lambda};
+            \node[serviceBox, right=2.5cm of instances] (cw) {CloudWatch};
+
+            \draw[arrowLine] (instances) -- node[above]{\scriptsize Logs + Metrics} (cw);
+
+            \node[serviceBox, below=1.2cm of cw] (scale) {Auto-Scaling / Alert};
+            \draw[arrowLine] (cw) -- node[right]{\scriptsize Alarm Trigger} (scale);
+        \end{tikzpicture}
+    }
 \end{center}
 
 \clearpage
 
 %--------------------------------------------------------------------
-% 6. ADDITIONAL VISUALIZATIONS
+% 7. A LEARNING PATH
 %--------------------------------------------------------------------
-\section{Additional Visualizations}
-
-\subsection{Application Architecture (Serverless Example)}
-\begin{center}
-    \begin{tikzpicture}[node distance=2cm]
-        \node[userFigure] (user) {User/Client};
-        \node[serviceBox, right=2.5cm of user] (apiGW) {API Gateway};
-        \node[serviceBox, right=2.5cm of apiGW] (lambda) {Lambda};
-        \node[database, right=2.5cm of lambda] (database) {DynamoDB};
-
-        \draw[arrowLine] (user) -- node[above]{\scriptsize HTTP Request} (apiGW);
-        \draw[arrowLine] (apiGW) -- node[above]{\scriptsize Invoke} (lambda);
-        \draw[arrowLine] (lambda) -- node[above]{\scriptsize Query/Store} (database);
-    \end{tikzpicture}
-\end{center}
-
-\subsection{Monitoring and Alerting Loop}
-\begin{center}
-    \begin{tikzpicture}[node distance=2.3cm]
-        \node[serviceBox] (instances) {EC2 / Lambda};
-        \node[serviceBox, right=3cm of instances] (cw) {CloudWatch};
-
-        \draw[arrowLine] (instances) -- node[above]{\scriptsize Logs + Metrics} (cw);
-
-        \node[serviceBox, below=1.5cm of cw] (alert) {Alert / Scaling};
-        \draw[arrowLine] (cw) -- node[right]{\scriptsize Alarm Trigger} (alert);
-
-    \end{tikzpicture}
-\end{center}
-
-\clearpage
-
-%--------------------------------------------------------------------
-% 7. LEARNING PATH
-%--------------------------------------------------------------------
-\section{Learning Path}
+\section{A Learning Path}
+\justifying
 
 \subsection{1. Foundation}
-Focus on:
 \begin{itemize}
-    \item S3 (basic storage)
-    \item Lambda (serverless compute)
-    \item DynamoDB (simple NoSQL)
+    \item \textbf{S3} for storage
+    \item \textbf{Lambda} for event-driven code
+    \item \textbf{DynamoDB} for simple NoSQL
 \end{itemize}
-Build small automation or workflow projects to get comfortable with the AWS console and basic configurations.
 
 \subsection{2. Intermediate Services}
-Once comfortable, expand:
 \begin{itemize}
-    \item \textbf{API Gateway} for building APIs
-    \item \textbf{RDS} for relational data
-    \item \textbf{EC2} for custom environments
+    \item \textbf{API Gateway} for REST/GraphQL
+    \item \textbf{EC2} for custom server environments
+    \item \textbf{RDS} for relational databases
 \end{itemize}
 
 \subsection{3. Advanced Tools}
-Tackle big-data or specialized domains:
 \begin{itemize}
-    \item \textbf{Kinesis} for real-time event streaming
-    \item \textbf{SageMaker} for machine learning
-    \item \textbf{Redshift} or \textbf{Athena} for analytics
+    \item \textbf{Kinesis} for streaming data
+    \item \textbf{SageMaker} for ML
+    \item \textbf{Athena/Redshift} for analytics
 \end{itemize}
 
 \begin{center}
-    \begin{tikzpicture}[node distance=2.5cm]
-        \node[serviceBox] (basic) {Basics:\\S3, Lambda, DynamoDB};
-        \node[serviceBox, right=3cm of basic] (inter) {Intermediate:\\EC2, RDS, API GW};
-        \node[serviceBox, right=3cm of inter] (advanced) {Advanced:\\Kinesis, SageMaker};
+    \resizebox{0.9\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.2cm]
+            \node[serviceBox] (basic) {Basics:\\S3, Lambda, DynamoDB};
+            \node[serviceBox, right=2.2cm of basic] (inter) {Intermediate:\\EC2, RDS, API GW};
+            \node[serviceBox, right=2.2cm of inter] (advanced) {Advanced:\\Kinesis, SageMaker};
 
-        \draw[arrowLine] (basic) -- (inter);
-        \draw[arrowLine] (inter) -- (advanced);
-    \end{tikzpicture}
+            \draw[arrowLine] (basic) -- (inter);
+            \draw[arrowLine] (inter) -- (advanced);
+        \end{tikzpicture}
+    }
 \end{center}
 
 \clearpage
@@ -458,14 +425,17 @@ Tackle big-data or specialized domains:
 %--------------------------------------------------------------------
 \section*{Conclusion}
 \addcontentsline{toc}{section}{Conclusion}
+\justifying
 
-We’ve covered the basics of \textbf{AWS} in a simple, visually guided way. By starting with fundamental services like S3, Lambda, and DynamoDB, you can quickly grasp the core principles of the AWS ecosystem. Then you can incrementally add services---EC2, RDS, API Gateway---to handle more complex or performance-intensive applications. Eventually, you can move on to real-time data processing (Kinesis), large-scale analytics (Redshift, Athena), and machine learning (SageMaker).
+By now, you should have a sense of how AWS can handle everything from simple websites to complex machine learning pipelines. Start with foundational services like \textbf{S3}, \textbf{Lambda}, and \textbf{DynamoDB}, then move on to \textbf{EC2}, \textbf{RDS}, and beyond. If you need real-time data or ML solutions, \textbf{Kinesis} and \textbf{SageMaker} are waiting.
 
-Throughout this journey:
+\textbf{Key tips}:
 \begin{itemize}
-    \item Keep experimenting with small, hands-on projects.
-    \item Use the \textbf{AWS Free Tier} to control costs.
-    \item Refer to official \href{https://aws.amazon.com/documentation/}{AWS Documentation} for deeper detail.
+    \item Use the \textbf{AWS Free Tier} to experiment cheaply.
+    \item Build real, small-scale projects to gain confidence.
+    \item Check out the
+          \href{https://aws.amazon.com/documentation/}{\textbf{official AWS docs}}
+          for deeper dives on each service.
 \end{itemize}
 
 \textbf{Happy Building!}

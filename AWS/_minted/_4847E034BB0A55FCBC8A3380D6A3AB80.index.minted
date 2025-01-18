@@ -1,10 +1,10 @@
 {
   "jobname": "AWS",
   "md5": "4847E034BB0A55FCBC8A3380D6A3AB80",
-  "timestamp": "20250118171811",
+  "timestamp": "20250118174218",
   "cachefiles": [
-    "26F4FEC2F6806ABF400FA827A491B9C8.highlight.minted",
+    "AF62445AF9D986E214E5370C625E3EBA.highlight.minted",
     "_4847E034BB0A55FCBC8A3380D6A3AB80.index.minted",
-    "default.style.minted"
+    "friendly.style.minted"
   ]
 }
