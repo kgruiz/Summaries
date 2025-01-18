@@ -80,11 +80,11 @@ These live inside a macOS app and integrate deeply with Safari and macOS. Ideal 
 While Safari extensions are primarily written in HTML, CSS, JavaScript, and JSON, other languages can provide additional power:
 
 \begin{itemize}
-    \item \textbf{TypeScript:} Adds type safety to JavaScript.
-    \item \textbf{WebAssembly:} Run C/C++/Rust code in the browser with near-native speed.
-    \item \textbf{Swift:} Especially for Safari App Extensions on macOS/iOS.
-    \item \textbf{Python:} Handy for build scripts, automation, or backend tasks.
-    \item \textbf{C++:} Can be compiled to WebAssembly for computationally intensive tasks.
+  \item \textbf{TypeScript:} Adds type safety to JavaScript.
+  \item \textbf{WebAssembly:} Run C/C++/Rust code in the browser with near-native speed.
+  \item \textbf{Swift:} Especially for Safari App Extensions on macOS/iOS.
+  \item \textbf{Python:} Handy for build scripts, automation, or backend tasks.
+  \item \textbf{C++:} Can be compiled to WebAssembly for computationally intensive tasks.
 \end{itemize}
 
 \subsection{Using Just Python or C++?}
@@ -93,25 +93,25 @@ You can’t build the entire extension in these languages alone. Browsers expect
 \section{Pros and Cons of Key Languages}
 \renewcommand{\arraystretch}{1.2}
 \begin{center}
-    \begin{tabular}{|m{3cm}|m{5cm}|m{5cm}|}
-        \hline
-        \textbf{Language} & \textbf{Pros}                      & \textbf{Cons}                  \\
-        \hline
-        HTML              & Universal layout                   & Static by itself               \\
-        \hline
-        CSS               & Powerful styling                   & Complex for large-scale design \\
-        \hline
-        JavaScript        & Widely supported, flexible         & No static typing by default    \\
-        \hline
-        TypeScript        & Type safety, large project scaling & Compiles to JavaScript         \\
-        \hline
-        WebAssembly       & Near-native speed                  & Requires JS integration        \\
-        \hline
-        Swift             & Deep Apple integration             & Apple-only                     \\
-        \hline
-        Python            & Great for scripting                & Not for the browser core       \\
-        \hline
-    \end{tabular}
+  \begin{tabular}{|m{3cm}|m{5cm}|m{5cm}|}
+    \hline
+    \textbf{Language} & \textbf{Pros}                      & \textbf{Cons}                  \\
+    \hline
+    HTML              & Universal layout                   & Static by itself               \\
+    \hline
+    CSS               & Powerful styling                   & Complex for large-scale design \\
+    \hline
+    JavaScript        & Widely supported, flexible         & No static typing by default    \\
+    \hline
+    TypeScript        & Type safety, large project scaling & Compiles to JavaScript         \\
+    \hline
+    WebAssembly       & Near-native speed                  & Requires JS integration        \\
+    \hline
+    Swift             & Deep Apple integration             & Apple-only                     \\
+    \hline
+    Python            & Great for scripting                & Not for the browser core       \\
+    \hline
+  \end{tabular}
 \end{center}
 
 \section{Accessing Websites and Data}
@@ -119,12 +119,12 @@ You can’t build the entire extension in these languages alone. Browsers expect
 Content scripts run in the context of a webpage’s DOM.
 
 \begin{minted}{json}
-{%
+{
   "manifest_version": 2,
   "name": "Content Script Example",
   "version": "1.0",
   "content_scripts": [
-    {%
+    {
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
@@ -188,9 +188,9 @@ Compile C++ to Wasm and call it from JavaScript.
 // mymodule.cpp
 #include <emscripten/emscripten.h>
 
-extern "C" {%
+extern "C" {
   EMSCRIPTEN_KEEPALIVE
-  int add(int a, int b) {%
+  int add(int a, int b) {
     return a + b;
   }
 }
@@ -206,12 +206,124 @@ Then use from JavaScript:
 fetch("mymodule.wasm")
   .then(r => r.arrayBuffer())
   .then(bytes => WebAssembly.instantiate(bytes))
-  .then(result => {%
+  .then(result => {
     console.log(result.instance.exports.add(2, 3));
   });
 \end{minted}
 
+\section{Examples of Safari Web Extensions}
+Below are additional examples that show how you might structure a simple Safari Web Extension. Each example uses standard web technologies, but you can adapt them to TypeScript, WebAssembly, or other languages as needed.
+
+\subsection{Dark Mode Toggler}
+This example toggles a dark mode style on any webpage. It includes a basic \texttt{manifest.json}, a background script, and a content script. The variable, function, and constant naming in the newly shown code follows a custom convention for clarity.
+
+\begin{minted}{json}
+{
+  "manifest_version": 2,
+  "name": "Dark Mode Toggler",
+  "version": "1.0",
+  "description": "Toggle dark mode on any page.",
+  "permissions": [
+    "activeTab"
+  ],
+  "browser_action": {
+    "default_title": "Toggle Dark Mode",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
+\end{minted}
+
+\begin{minted}{javascript}
+// background.js
+function ToggleDarkMode() {
+  chrome.tabs.executeScript({
+    file: "content.js"
+  });
+}
+
+chrome.browserAction.onClicked.addListener(ToggleDarkMode);
+\end{minted}
+
+\begin{minted}{javascript}
+// content.js
+const DARK_MODE_CLASS = "dark-mode-active";
+
+function TogglePageDarkMode() {
+  let bodyElement = document.body;
+  if (bodyElement.classList.contains(DARK_MODE_CLASS)) {
+    bodyElement.classList.remove(DARK_MODE_CLASS);
+  } else {
+    bodyElement.classList.add(DARK_MODE_CLASS);
+  }
+}
+
+TogglePageDarkMode();
+\end{minted}
+
+\begin{minted}{css}
+/* content.css: example stylesheet if needed */
+.dark-mode-active {
+  filter: invert(1) hue-rotate(180deg);
+}
+\end{minted}
+
+You can bundle the optional \texttt{content.css} if your extension needs more styling control. When the user clicks the extension's icon, it injects \texttt{content.js} which toggles a dark mode filter.
+
+\subsection{Link Shortener Extension}
+This extension fetches a short link from an API and inserts it into the current page’s DOM. It’s useful for quickly sharing long links. The \texttt{manifest.json} is similar, so we’ll just focus on the content script.
+
+\begin{minted}{javascript}
+// content.js
+const API_URL = "https://api.tinyurl.com/create";
+let currentUrl = window.location.href;
+
+function FetchShortLink(urlToShorten) {
+  return fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: urlToShorten
+    })
+  })
+    .then(response => response.json());
+}
+
+function InsertShortLinkIntoPage(shortLink) {
+  let messageContainer = document.createElement("div");
+  messageContainer.style.position = "fixed";
+  messageContainer.style.top = "10px";
+  messageContainer.style.right = "10px";
+  messageContainer.style.padding = "10px";
+  messageContainer.style.backgroundColor = "#1F618D";
+  messageContainer.style.color = "#FFFFFF";
+  messageContainer.style.zIndex = 999999;
+  messageContainer.textContent = "Short link: " + shortLink;
+  document.body.appendChild(messageContainer);
+}
+
+FetchShortLink(currentUrl)
+  .then(data => {
+    if (data.data && data.data.tiny_url) {
+      InsertShortLinkIntoPage(data.data.tiny_url);
+    } else {
+      console.error("Shortening failed:", data);
+    }
+  })
+  .catch(error => console.error("Request error:", error));
+\end{minted}
+
+When the content script runs, it posts the page’s URL to a link-shortening API, then displays the short link in a fixed-position overlay. You could add a browser action or context menu to trigger it only when requested.
+
 \section{Conclusion}
-Safari extensions rely on standard web technologies, but you can use other languages to streamline workflows or speed up certain tasks. Whether you automate files with Python or bring in C++ via WebAssembly, you can combine these tools to build powerful Safari extensions that go beyond simple front-end scripting.
+Safari extensions rely on standard web technologies, but you can use other languages to streamline workflows or speed up certain tasks. Whether you automate files with Python or bring in C++ via WebAssembly, you can combine these tools to build powerful Safari extensions that go beyond simple front-end scripting. The examples above demonstrate how you can inject and manage scripts, toggle styling, or integrate external APIs, and you can expand on them to create truly unique experiences in Safari.
 
 \end{document}

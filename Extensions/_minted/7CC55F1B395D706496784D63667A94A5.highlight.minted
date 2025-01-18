@@ -1,0 +1,6 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c}{/* content.css: example stylesheet if needed */}
+\PYG{p}{.}\PYG{n+nc}{dark\PYGZhy{}mode\PYGZhy{}active}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{filter}\PYG{p}{:}\PYG{+w}{ }\PYG{n+nb}{invert}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{n+nb}{hue\PYGZhy{}rotate}\PYG{p}{(}\PYG{l+m+mi}{180}\PYG{k+kt}{deg}\PYG{p}{)}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

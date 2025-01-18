@@ -1,0 +1,10 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// background.js}
+\PYG{k+kd}{function}\PYG{+w}{ }\PYG{n+nx}{ToggleDarkMode}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{n+nx}{chrome}\PYG{p}{.}\PYG{n+nx}{tabs}\PYG{p}{.}\PYG{n+nx}{executeScript}\PYG{p}{(}\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n+nx}{file}\PYG{o}{:}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}content.js\PYGZdq{}}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n+nx}{chrome}\PYG{p}{.}\PYG{n+nx}{browserAction}\PYG{p}{.}\PYG{n+nx}{onClicked}\PYG{p}{.}\PYG{n+nx}{addListener}\PYG{p}{(}\PYG{n+nx}{ToggleDarkMode}\PYG{p}{)}\PYG{p}{;}
+\end{MintedVerbatim}
