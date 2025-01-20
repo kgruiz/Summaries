@@ -1,116 +1,103 @@
 \documentclass[12pt]{article}
 
 % --------------------------------------------------------
-% CLASSIC LATEX FONTS/ENCODING
+% FONTS & ENCODING
 % --------------------------------------------------------
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern} % loads Latin Modern fonts in a standard way
+\usepackage{lmodern}
 
 % --------------------------------------------------------
-% PAGE & FONT SETUP
+% PAGE SETUP
 % --------------------------------------------------------
 \usepackage[margin=1in]{geometry}
 \usepackage{ragged2e}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
-\hypersetup{%
+\hypersetup{
   colorlinks=true,
-  linkcolor=blue!50!black,
-  urlcolor=blue!50!black
+  linkcolor=blue!60!black,
+  urlcolor=blue!60!black
 }
 
-\setlength{\parskip}{6pt}
+\setlength{\parskip}{8pt}
 \setlength{\parindent}{0pt}
 
 % --------------------------------------------------------
-% COLOR & SECTION STYLING
+% COLORS & SECTION STYLING
 % --------------------------------------------------------
 \usepackage{xcolor}
 \usepackage{sectsty}
 \usepackage{titlesec}
 
 \definecolor{mainDark}{HTML}{2C3E50}
-\definecolor{mainLight}{HTML}{ECF0F1}
-\definecolor{accentColor}{HTML}{3498DB}
+\definecolor{awsColor}{HTML}{F8C471}
+\definecolor{localColor}{HTML}{82E0AA}
+\definecolor{userColor}{HTML}{85C1E9}
 \definecolor{boxBg}{HTML}{F8F9FA}
 
 \sectionfont{\color{mainDark}\huge}
 \subsectionfont{\color{mainDark}\Large}
-\subsubsectionfont{\color{mainDark}\large}
-
-\titlespacing*{\section}{0pt}{0.8em}{0.6em}
-\titlespacing*{\subsection}{0pt}{0.7em}{0.4em}
+\titlespacing*{\section}{0pt}{1em}{0.5em}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.3em}
 
 % --------------------------------------------------------
-% CODE LISTINGS (MINTED)
+% CODE LISTINGS
 % --------------------------------------------------------
 \usepackage{minted}
 \usemintedstyle{friendly}
 
 % --------------------------------------------------------
-% TIKZ FOR DIAGRAMS
+% TIKZ DIAGRAMS
 % --------------------------------------------------------
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,calc,arrows.meta,shapes.misc}
 
-% Custom styles for boxes/arrows
-\tikzset{%
-  serviceBox/.style={%
+% Styles for color-coded boxes
+\tikzset{
+  userBox/.style={
     rectangle,
     rounded corners,
     draw=mainDark,
-    fill=boxBg,
-    text width=3.2cm,
+    fill=userColor!40,
+    text width=3cm,
     minimum height=1.2cm,
     align=center
-  },
-  arrowLine/.style={%
+ },
+  localBox/.style={
+    rectangle,
+    rounded corners,
+    draw=mainDark,
+    fill=localColor!40,
+    text width=3cm,
+    minimum height=1.2cm,
+    align=center
+ },
+  awsBox/.style={
+    rectangle,
+    rounded corners,
+    draw=mainDark,
+    fill=awsColor!40,
+    text width=3cm,
+    minimum height=1.2cm,
+    align=center
+ },
+  arrowLine/.style={
     -{Latex[length=3mm,width=2mm]},
     thick,
     color=mainDark
-  },
-  cloudService/.style={%
-    cloud,
-    draw=mainDark,
-    fill=boxBg,
-    cloud puffs=15,
-    cloud puff arc=120,
-    aspect=2,
-    minimum width=2.6cm,
-    align=center
-  },
-  database/.style={%
-    cylinder,
-    cylinder uses custom fill,
-    cylinder body fill=boxBg,
-    cylinder end fill=boxBg,
-    draw=mainDark,
-    shape aspect=0.7,
-    minimum height=2.2cm,
-    minimum width=1.4cm,
-    align=center
-  },
-  userFigure/.style={%
-    rectangle,
-    rounded corners,
-    draw=mainDark,
-    fill=green!15,
-    text width=2.7cm,
-    minimum height=1.1cm,
-    align=center
-  }
+ }
 }
 
 % --------------------------------------------------------
 % TITLE
 % --------------------------------------------------------
-\title{%
-  \vspace{-2cm}
-  \textbf{\color{mainDark}\Huge A Modern, Visual Introduction to AWS}\\
-  \vspace{0.2cm}
-  \large \textit{(Beginner-Friendly Edition)}
+\title{
+    \vspace{-2cm}
+    \textbf{\color{mainDark}\Huge AWS: A Simple, Visual Guide}\\
+    \vspace{0.2cm}
+    \large \textit{With Plain Definitions, Diagrams, and Detailed Comparisons}
 }
 \author{}
 \date{}
@@ -123,476 +110,432 @@
 % INTRO
 % --------------------------------------------------------
 \section*{Introduction}
-\addcontentsline{toc}{section}{Introduction}
 \justifying
-
-\textbf{Amazon Web Services (AWS)} is a platform where you can rent computing resources---like virtual machines or storage---on demand. Traditionally, you'd buy your own physical servers and handle hardware yourself, but AWS eliminates much of that work, letting you pay only for the services you use.
+\textbf{Amazon Web Services (AWS)} provides on-demand infrastructure and services so you don't have to buy or maintain physical servers. You pay only for what you use, and you can scale up or down easily. This document explains \textit{how AWS services interact}, \textit{how data flows in multiple directions}, and \textit{the differences/similarities between storage/database services like S3, RDS, DynamoDB, EBS}, and others. We'll keep definitions simple and include helpful diagrams.
 
 \begin{center}
-    \resizebox{0.9\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3cm]
-            \node[serviceBox, fill=red!15, text width=3.2cm] (onprem) {On-Prem Servers};
-            \node[cloudService, right=4.5cm of onprem] (awsCloud) {AWS Cloud};
-            \draw[arrowLine] (onprem) -- node[above]{\scriptsize Migrate} (awsCloud);
+    \resizebox{0.7\textwidth}{!}{
+        \begin{tikzpicture}[node distance=4cm]
+            \node[localBox, text width=3.5cm] (local) {On-Prem or\\Local Setup};
+            \node[awsBox, text width=3.5cm, right=4cm of local] (cloud) {AWS Cloud};
+
+            \draw[arrowLine] (local) -- node[above]{\scriptsize Connect} (cloud);
+            \draw[arrowLine] (cloud) -- node[below]{\scriptsize Hybrid} (local);
         \end{tikzpicture}
     }
 \end{center}
 
-Instead of maintaining a data center, AWS handles physical security, power, cooling, and more. This gives you more time to build solutions rather than worry about hardware.
+\clearpage
 
+% --------------------------------------------------------
+% 1. KEY TERMS & DEFINITIONS
+% --------------------------------------------------------
+\section{Key Terms \& Definitions (Quick Glossary)}
+\justifying
+Here are concise definitions for core AWS terms used throughout this guide. Check the diagrams to visualize how they interact.
+
+\subsection*{Region}
+A geographical area (e.g., \texttt{us-east-1} or \texttt{eu-west-1}). Each region hosts multiple data centers.
+
+\subsection*{Availability Zone (AZ)}
+One or more data centers in a region. Deploying resources across AZs can increase resilience.
+
+\subsection*{EC2 (Elastic Compute Cloud)}
+Virtual machines in AWS. You choose the OS, apps, and scale as needed. AWS manages the physical servers.
+
+\subsection*{Lambda (Serverless)}
+Upload code, and AWS runs it whenever an event triggers it (e.g., S3 file upload). No need to manage servers.
+
+\subsection*{S3 (Simple Storage Service)}
+Object storage: store files, images, backups, or logs in \textit{buckets}. Highly durable and globally accessible.
+
+\subsection*{EBS (Elastic Block Store)}
+Block storage for \textbf{EC2} instances, like a virtual hard drive you attach to your EC2 VM.
+
+\subsection*{RDS (Relational Database Service)}
+Managed SQL database (MySQL, PostgreSQL, etc.). AWS handles patches, backups, and scaling up to a point.
+
+\subsection*{DynamoDB}
+A NoSQL key-value database. Can handle massive throughput and scales horizontally.
+
+\subsection*{CloudFront}
+A Content Delivery Network (CDN) that caches or delivers content from edge locations near the user.
+
+\subsection*{Load Balancer (ELB)}
+Distributes incoming traffic among multiple EC2 servers or containers so no single server is overwhelmed.
+
+\subsection*{API Gateway}
+Front-end for your REST or WebSocket APIs. Often used with \textbf{Lambda} or \textbf{EC2} to route external calls.
+
+\subsection*{SNS (Simple Notification Service)}
+Sends messages to subscribers (e.g., email, text, or AWS services) when certain events happen.
+
+\subsection*{EventBridge}
+An advanced event bus system that can route events from multiple AWS sources (like S3, EC2) or external apps to your services.
+
+\subsection*{Kinesis}
+A service for ingesting and processing large streams of data in real time (e.g., logs, sensor data).
+
+\subsection*{Redshift}
+A data warehouse solution for large-scale analytical queries. Good for big data (SQL-based).
+
+\subsection*{Athena}
+Run SQL queries on files stored in \textbf{S3} with no need to manage a database cluster.
+
+\subsection*{SageMaker}
+AWS platform to train and deploy machine learning models without manually setting up servers.
+
+\subsection*{ECS/EKS}
+Containers on AWS. \textbf{ECS} is Amazon's own container orchestration, \textbf{EKS} is AWS-managed Kubernetes.
+
+\subsection*{Route 53}
+AWS's Domain Name System (DNS) service. It can route users to different Regions or services.
+
+\subsection*{IoT}
+AWS IoT services let physical devices (sensors, microcontrollers) send/receive data in the cloud.
+
+\subsection*{VPN / DirectConnect}
+Methods to link your on-premises data center to AWS, creating a \textbf{hybrid} environment.
+
+\clearpage
+
+% --------------------------------------------------------
+% 2. HOW SERVICES INTERACT (HIGH-LEVEL)
+% --------------------------------------------------------
+\section{How AWS Services Interact (High-Level)}
+
+\begin{center}
+    \resizebox{0.9\textwidth}{!}{
+        \begin{tikzpicture}[node distance=2.5cm]
+
+            % Top row: "Frontend"
+            \node[awsBox, text width=3.2cm] (cloudfront) {CloudFront (CDN)};
+            \node[awsBox, text width=3.2cm, right=3.5cm of cloudfront] (api) {API Gateway};
+            \node[awsBox, text width=3.2cm, right=3.5cm of api] (elb) {Load Balancer};
+
+            % Middle row: "Compute"
+            \node[awsBox, text width=3cm, below=2.5cm of cloudfront] (ec2) {EC2 (VMs)};
+            \node[awsBox, text width=3cm, right=3cm of ec2] (lambda) {Lambda};
+            \node[awsBox, text width=3cm, right=3cm of lambda] (containers) {ECS/EKS};
+
+            % Storage / DB
+            \node[awsBox, text width=3cm, below=2.6cm of ec2] (s3) {S3};
+            \node[awsBox, text width=3cm, right=3cm of s3] (rds) {RDS (SQL)};
+            \node[awsBox, text width=3cm, right=3cm of rds] (dynamo) {DynamoDB};
+
+            % Lower row: "Analytics / ML"
+            \node[awsBox, text width=3.5cm, below=2.7cm of s3] (kinesis) {Kinesis};
+            \node[awsBox, text width=3.5cm, right=3.5cm of kinesis] (athena) {Athena};
+            \node[awsBox, text width=3.5cm, right=3.5cm of athena] (sagemaker) {SageMaker};
+
+            % Arrows top to middle
+            \draw[arrowLine] (cloudfront) -- (ec2);
+            \draw[arrowLine] (cloudfront) -- (lambda);
+            \draw[arrowLine] (api) -- (lambda);
+            \draw[arrowLine] (elb) -- (ec2);
+            \draw[arrowLine] (elb) -- (containers);
+
+            % Middle to storage
+            \draw[arrowLine] (ec2) -- (s3);
+            \draw[arrowLine] (ec2) -- (rds);
+            \draw[arrowLine] (lambda) -- (s3);
+            \draw[arrowLine] (lambda) -- (dynamo);
+            \draw[arrowLine] (containers) -- (rds);
+            \draw[arrowLine] (containers) -- (dynamo);
+
+            % Storage to analytics
+            \draw[arrowLine] (s3) -- (kinesis);
+            \draw[arrowLine] (kinesis) -- (athena);
+            \draw[arrowLine] (dynamo) -- (sagemaker);
+            \draw[arrowLine] (rds) -- (sagemaker);
+            \draw[arrowLine] (s3) -- (athena);
+
+        \end{tikzpicture}
+    }
+\end{center}
+
+\noindent
+\textbf{Observations:}
 \begin{itemize}
-    \item Learn how AWS compares to traditional (on-premises) servers.
-    \item Explore the major AWS services and how they fit together.
-    \item See diagrams that illustrate common AWS architectures.
-    \item Check out simple project ideas to get hands-on experience.
+    \item Services like \textbf{CloudFront}, \textbf{API Gateway}, or \textbf{ELB} handle incoming traffic.
+    \item \textbf{EC2}, \textbf{Lambda}, or \textbf{ECS/EKS} do the compute work.
+    \item \textbf{S3}, \textbf{RDS}, and \textbf{DynamoDB} provide storage or database solutions.
+    \item Tools like \textbf{Kinesis}, \textbf{Athena}, and \textbf{SageMaker} handle analytics or ML tasks.
 \end{itemize}
 
-Let's begin!
-
 \clearpage
 
 % --------------------------------------------------------
-% 1. COMPARING ON-PREMISES VS. AWS
+% 3. COMPARING S3, EBS, RDS, DYNAMODB, ETC.
 % --------------------------------------------------------
-\section{Comparing On-Premises vs. AWS}
-\justifying
+\section{AWS Storage \& Database Comparisons}
 
-\subsection{High-Level Differences}
+AWS has \textbf{multiple ways to store data}. Each one fits different use cases.
 
-\begin{center}
-    \resizebox{0.95\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=2.7cm]
-            \node[serviceBox, text width=3.2cm, fill=red!15] (onprem) {On-Premises\\(Your Servers)};
-            \node[serviceBox, text width=3.2cm, fill=blue!15, right=5cm of onprem] (cloud) {AWS\\(Cloud Infra)};
-
-            \draw[arrowLine] (onprem) -- node[above]{\scriptsize Traditional} (cloud);
-
-            \node[serviceBox, fill=red!10, below=1.3cm of onprem, text width=4.2cm] (onpremDetails)
-            {\textbf{You handle:}
-                \begin{itemize}
-                    \item Buying hardware
-                    \item Physical security
-                    \item Repairs / upgrades
-                \end{itemize}
-            };
-            \node[serviceBox, fill=blue!10, below=1.3cm of cloud, text width=4.2cm] (cloudDetails)
-            {\textbf{AWS handles:}
-                \begin{itemize}
-                    \item Data center upkeep
-                    \item Power, cooling, networking
-                    \item Scaling physical capacity
-                \end{itemize}
-            };
-
-            \draw[arrowLine] (onprem) -- (onpremDetails);
-            \draw[arrowLine] (cloud) -- (cloudDetails);
-
-        \end{tikzpicture}
-    }
-\end{center}
-
-On-premises means you manage everything yourself: building or renting space for servers, dealing with hardware failures, etc. AWS handles those tasks and charges you for the resources you actually use.
-
-\clearpage
-
-% --------------------------------------------------------
-% 2. WHAT IS AWS?
-% --------------------------------------------------------
-\section{What is AWS?}
-\justifying
-
-\subsection{Core Service Areas}
-AWS offers many types of services, but some core ones include:
+\subsection*{3.1. S3 vs. EBS vs. EFS (for completeness)}
 \begin{itemize}
-    \item \textbf{Compute (EC2, Lambda)}: How you run your code or applications.
-    \item \textbf{Storage (S3, EBS)}: Where you store files, backups, or disk volumes.
-    \item \textbf{Databases (RDS, DynamoDB)}: Choose relational (SQL) or NoSQL data stores.
-    \item \textbf{Networking (VPC, CloudFront)}: Control network traffic and deliver content globally.
-    \item \textbf{Analytics (Kinesis, Athena)}: Process data streams or query large data sets.
-    \item \textbf{Machine Learning (SageMaker)}: Tools to build and train models, then deploy them.
+    \item \textbf{S3 (Object Storage)}:
+          \begin{itemize}
+              \item Store files in buckets.
+              \item Access via HTTP/HTTPS.
+              \item Good for images, backups, static websites.
+              \item Not a traditional filesystem. You get objects, not directories in the same sense.
+          \end{itemize}
+    \item \textbf{EBS (Block Storage)}:
+          \begin{itemize}
+              \item Attaches to \textbf{one} EC2 instance like a hard drive.
+              \item You can format it with a filesystem (e.g., ext4) and mount it in your VM.
+              \item Good for running databases on a single server or storing OS-level data.
+          \end{itemize}
+    \item \textbf{EFS (Elastic File System)}:
+          \begin{itemize}
+              \item Network file system that can be shared by multiple EC2 instances at once.
+              \item If you need standard POSIX filesystem features across multiple servers.
+          \end{itemize}
 \end{itemize}
 
-\subsection{Regions and Availability Zones}
-AWS organizes its data centers worldwide into \textbf{Regions} (like US East 1, EU West 1, etc.). Each Region has multiple \textbf{Availability Zones} to improve reliability and fault tolerance.
+\subsection*{3.2. RDS (SQL) vs. DynamoDB (NoSQL)}
+\begin{itemize}
+    \item \textbf{RDS (Relational Database Service)}:
+          \begin{itemize}
+              \item SQL-based (MySQL, PostgreSQL, etc.).
+              \item Tables with columns and rows. Great for structured queries and relationships.
+              \item AWS manages backups, patches, scaling up to a limit. For read scaling, you can add read replicas.
+          \end{itemize}
+    \item \textbf{DynamoDB (NoSQL)}:
+          \begin{itemize}
+              \item Key-value or document-based.
+              \item Scales horizontally. You can handle extremely high request rates with auto-scaling.
+              \item Great for simple queries on large amounts of data.
+              \item Doesn’t support complex SQL joins or relationships well.
+          \end{itemize}
+\end{itemize}
 
 \begin{center}
-    \resizebox{0.95\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=1.5cm]
-            % Styles for region boxes
-            \tikzset{%
-                regionStyle/.style={%
-                        rectangle,
-                        rounded corners,
-                        draw=black,
-                        text centered,
-                        fill=blue!20,
-                        minimum width=3cm,
-                        minimum height=1cm,
-                        font=\small,
-                        align=center
-                    },
-                azStyle/.style={%
-                        rectangle,
-                        rounded corners,
-                        draw=black,
-                        fill=green!20,
-                        text centered,
-                        minimum width=2cm,
-                        minimum height=0.8cm,
-                        font=\small
-                    },
-                arrowLine/.style={%
-                        ->,
-                        thick
-                    }
-            }
+    \resizebox{0.95\textwidth}{!}{
+        \begin{tikzpicture}[node distance=4cm]
+            % S3 box
+            \node[awsBox, text width=3.5cm] (s3) {S3\\(Object Store)};
+            % EBS box
+            \node[awsBox, text width=3.5cm, right=4cm of s3] (ebs) {EBS\\(Block Store)};
+            % EFS box (optional)
+            \node[awsBox, text width=3.5cm, below=1.5cm of ebs] (efs) {EFS\\(Shared File)};
 
-            % Region 1 with three AZs
-            \node[regionStyle] (region1) {%
-                \begin{tabular}{c}
-                    Region 1 \\
-                    {\footnotesize (US East 1)}
-                \end{tabular}
-            };
+            \draw[arrowLine] (s3) -- node[above]{\scriptsize different approach} (ebs);
+            \draw[arrowLine] (ebs) -- (efs);
 
-            \node[azStyle, below left=of region1, xshift=-0.4cm] (az1a) {AZ1a};
-            \node[azStyle, below=of region1] (az1b) {AZ1b};
-            \node[azStyle, below right=of region1, xshift=0.4cm] (az1c) {AZ1c};
-
-            \draw[arrowLine] (region1.south) -- (az1a.north);
-            \draw[arrowLine] (region1.south) -- (az1b.north);
-            \draw[arrowLine] (region1.south) -- (az1c.north);
-
-            % Region 2 with three AZs
-            \node[regionStyle, right=6cm of region1, yshift=-2cm] (region2) {%
-                \begin{tabular}{c}
-                    Region 2 \\
-                    {\footnotesize (EU West 1)}
-                \end{tabular}
-            };
-
-            \node[azStyle, below left=of region2, xshift=-0.4cm] (az2a) {AZ2a};
-            \node[azStyle, below=of region2] (az2b) {AZ2b};
-            \node[azStyle, below right=of region2, xshift=0.4cm] (az2c) {AZ2c};
-
-            \draw[arrowLine] (region2.south) -- (az2a.north);
-            \draw[arrowLine] (region2.south) -- (az2b.north);
-            \draw[arrowLine] (region2.south) -- (az2c.north);
-
-            % Region 3 with three AZs
-            \node[regionStyle, right=6cm of region2, yshift=+2cm] (region3) {%
-                \begin{tabular}{c}
-                    Region 3 \\
-                    {\footnotesize (AP Southeast)}
-                \end{tabular}
-            };
-
-            \node[azStyle, below left=of region3, xshift=-0.4cm] (az3a) {AZ3a};
-            \node[azStyle, below=of region3] (az3b) {AZ3b};
-            \node[azStyle, below right=of region3, xshift=0.4cm] (az3c) {AZ3c};
-
-            \draw[arrowLine] (region3.south) -- (az3a.north);
-            \draw[arrowLine] (region3.south) -- (az3b.north);
-            \draw[arrowLine] (region3.south) -- (az3c.north);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\clearpage
-
-% --------------------------------------------------------
-% 3. HOW COMPANIES USE AWS
-% --------------------------------------------------------
-\section{How Companies Use AWS}
-\justifying
-
-\subsection{Hosting Websites}
-From a simple static site stored in \textbf{S3} to a large dynamic application running on \textbf{EC2} or container services.
-
-\begin{center}
-    \resizebox{0.92\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=2.7cm]
-            \node[userFigure] (user) {Web Browser};
-            \node[serviceBox, right=2.7cm of user] (cloudfront) {CloudFront CDN};
-            \node[serviceBox, right=2.7cm of cloudfront] (ec2) {EC2 Server};
-            \node[database, right=2.7cm of ec2] (rds) {RDS DB};
-
-            \draw[arrowLine] (user) -- node[above]{\scriptsize HTTP Request} (cloudfront);
-            \draw[arrowLine] (cloudfront) -- node[above]{\scriptsize Forward to App} (ec2);
-            \draw[arrowLine] (ec2) -- node[above]{\scriptsize Query Data} (rds);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\subsection{Data Storage and Backup}
-Companies keep backups, media, or data archives in \textbf{S3}, which provides high durability and easy retrieval.
-
-\subsection{Application Development}
-Developers build microservices using \textbf{Lambda} and \textbf{API Gateway}, then store structured data in \textbf{RDS} or \textbf{DynamoDB}.
-
-\clearpage
-
-% --------------------------------------------------------
-% 4. SIMPLE AWS ARCHITECTURES
-% --------------------------------------------------------
-\section{Simple AWS Architectures}
-\justifying
-
-Below are more small diagrams that explain common patterns.
-
-\subsection{Serverless File Processor}
-\begin{center}
-    \resizebox{\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3cm]
-            \node[userFigure] (upload) {User Upload};
-            \node[cloudService, right=3.5cm of upload] (s3) {S3 Bucket};
-            \node[serviceBox, right=3.5cm of s3] (lambda) {Lambda};
-            \node[serviceBox, right=3.5cm of lambda] (done) {Processed Bucket (S3)};
-
-            \draw[arrowLine] (upload) -- node[above]{\scriptsize File} (s3);
-            \draw[arrowLine] (s3) -- node[above]{\scriptsize Trigger} (lambda);
-            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Store Output} (done);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\subsection{Event-Driven Workflow}
-\begin{center}
-    \resizebox{0.9\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3cm]
-            \node[serviceBox] (s3) {S3};
-            \node[serviceBox, right=3.5cm of s3] (sns) {SNS Topic};
-            \node[serviceBox, right=3.5cm of sns] (lambda) {Lambda};
-            \node[database, right=3.5cm of lambda] (ddb) {DynamoDB};
-
-            \draw[arrowLine] (s3) -- node[above]{\scriptsize Event} (sns);
-            \draw[arrowLine] (sns) -- node[above]{\scriptsize Notify} (lambda);
-            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Write Data} (ddb);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\subsection{Monitoring with CloudWatch}
-\begin{center}
-    \resizebox{0.85\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3cm]
-            \node[serviceBox] (resource) {EC2, Lambda};
-            \node[serviceBox, right=3.5cm of resource] (cw) {CloudWatch};
-            \node[serviceBox, below=1.7cm of cw] (alarms) {Alarms/Logs};
-            \node[serviceBox, below=1.7cm of resource] (autoscale) {Auto Scaling};
-
-            % Fixed this line by escaping the ampersand:
-            \draw[arrowLine] (resource) -- node[above]{\scriptsize Metrics \& Logs} (cw);
-            \draw[arrowLine] (cw) -- node[right]{\scriptsize Alert} (alarms);
-            \draw[arrowLine] (cw) -- node[left]{\scriptsize Scale Out} (autoscale);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\clearpage
-
-% --------------------------------------------------------
-% 5. KEY AWS SERVICES (SIMPLIFIED)
-% --------------------------------------------------------
-\section{Key AWS Services (Simplified)}
-\justifying
-
-\subsection{S3 vs. EBS (Two Types of Storage)}
-\begin{center}
-    \resizebox{0.85\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=4.3cm]
-            \node[serviceBox, fill=blue!10, text width=3.5cm] (s3) {S3\\(Object Storage)};
-            \node[serviceBox, fill=blue!10, text width=3.5cm, right=4.3cm of s3] (ebs) {EBS\\(Block Storage)};
-
-            \draw[arrowLine] (s3) -- node[above]{\scriptsize File vs. Disk} (ebs);
-        \end{tikzpicture}
-    }
-\end{center}
-\textbf{S3} is for storing files ("objects") in buckets. \textbf{EBS} acts like a hard drive attached to an EC2 server.
-
-\subsection{EC2 vs. Lambda (Compute Options)}
-\begin{center}
-    \resizebox{0.85\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=4.3cm]
-            \node[serviceBox, fill=green!10, text width=3.5cm] (ec2) {EC2:\\Full Server Control};
-            \node[serviceBox, fill=green!10, text width=3.5cm, right=4.3cm of ec2] (lambda) {Lambda:\\Serverless Functions};
-
-            \draw[arrowLine] (ec2) -- node[above]{\scriptsize Different Approaches} (lambda);
-        \end{tikzpicture}
-    }
-\end{center}
-\textbf{EC2} is a virtual machine you configure. \textbf{Lambda} runs your code in response to events without you managing servers.
-
-\subsection{Databases: RDS vs. DynamoDB}
-\begin{center}
-    \resizebox{0.85\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=4.3cm]
-            \node[database, fill=purple!10, text width=3cm] (rds) {RDS\\(Relational)};
-            \node[database, fill=purple!10, text width=3cm, right=4.3cm of rds] (ddb) {DynamoDB\\(NoSQL)};
+            % RDS box
+            \node[awsBox, text width=3.5cm, below=1.5cm of s3] (rds) {RDS\\(Relational)};
+            \node[awsBox, text width=3.5cm, right=4cm of rds] (ddb) {DynamoDB\\(NoSQL)};
 
             \draw[arrowLine] (rds) -- node[above]{\scriptsize SQL vs. NoSQL} (ddb);
         \end{tikzpicture}
     }
 \end{center}
-\textbf{RDS} supports databases like MySQL or PostgreSQL, while \textbf{DynamoDB} is a key-value NoSQL store.
 
-\subsection{CloudFront (CDN)}
-Provides faster delivery of static or dynamic content by using "edge locations" near users around the world.
+\noindent
+\textbf{Basic rule of thumb}:
+\begin{itemize}
+    \item If you want to store \textit{files} or \textit{objects} (like images, PDFs), \textbf{S3} is best.
+    \item If you need a \textbf{disk} attached to an EC2 instance, use \textbf{EBS}.
+    \item If multiple servers need to share a network filesystem, use \textbf{EFS}.
+    \item If you want a \textbf{SQL} database, choose \textbf{RDS}.
+    \item If you want a \textbf{NoSQL} (key-value) database that scales big, pick \textbf{DynamoDB}.
+\end{itemize}
 
-\subsection{Sample Lambda Code}
+\clearpage
+
+% --------------------------------------------------------
+% 4. EXAMPLE OF INTERACTIONS AMONG THESE STORES
+% --------------------------------------------------------
+\section{Interactions Among S3, EBS, RDS, and DynamoDB}
+
+\subsection*{4.1 Architecture Diagram}
+\begin{center}
+    \resizebox{0.85\textwidth}{!}{
+        \begin{tikzpicture}[node distance=3cm]
+
+            % EC2 in the middle
+            \node[awsBox, text width=3.3cm] (ec2) {EC2 (VM)};
+
+            % EBS to the left
+            \node[awsBox, text width=3.3cm, left=3cm of ec2] (ebs) {EBS\\(Attached Volume)};
+            \draw[arrowLine] (ec2) -- (ebs);
+            \draw[arrowLine] (ebs) -- (ec2);
+
+            % S3 on top
+            \node[awsBox, text width=3.3cm, above=2cm of ec2] (s3) {S3 (Bucket)};
+            \draw[arrowLine] (ec2) -- (s3);
+            \draw[arrowLine] (s3) -- (ec2);
+
+            % RDS on bottom
+            \node[awsBox, text width=3.3cm, below right=1.7cm of ec2] (rds) {RDS (SQL)};
+            \draw[arrowLine] (ec2) -- (rds);
+            \draw[arrowLine] (rds) -- (ec2);
+
+            % Dynamo on bottom left
+            \node[awsBox, text width=3.3cm, below left=1.7cm of ec2] (ddb) {DynamoDB (NoSQL)};
+            \draw[arrowLine] (ec2) -- (ddb);
+            \draw[arrowLine] (ddb) -- (ec2);
+
+            % Possibly show S3 <-> Lambda or something
+            \node[awsBox, text width=3.3cm, right=3.3cm of ec2] (lambda) {Lambda};
+            \draw[arrowLine] (s3) to[bend left=20] (lambda);
+            \draw[arrowLine] (lambda) to[bend left=20] (s3);
+            \draw[arrowLine] (lambda) -- (rds);
+            \draw[arrowLine] (lambda) -- (ddb);
+
+        \end{tikzpicture}
+    }
+\end{center}
+
+\noindent
+\textbf{Explanations}:
+\begin{itemize}
+    \item \textbf{EBS} is a virtual disk that the EC2 instance uses like a normal hard drive (storing OS files, logs, etc.).
+    \item \textbf{S3} can store large objects or backups for the EC2 instance. The instance can upload or download files to S3.
+    \item \textbf{RDS} might store relational (SQL) data for the application running on EC2.
+    \item \textbf{DynamoDB} might store NoSQL data if the app needs a key-value store for certain high-scale operations.
+    \item \textbf{Lambda} can be triggered by changes in S3 or read/writes to RDS or DynamoDB too, adding serverless workflows.
+\end{itemize}
+
+\subsection*{4.2 Differences in Data Access Patterns}
+\begin{itemize}
+    \item \textbf{EBS:} Accessed only by the EC2 instance it's attached to (unless you do specialized multi-attach). Speaks like a normal drive: ext4, NTFS, etc.
+    \item \textbf{S3:} Accessed by \texttt{HTTP/HTTPS}, can be from EC2, Lambda, or even the public internet if you allow it.
+    \item \textbf{RDS:} Accessed via SQL queries (e.g., MySQL protocol). Typically from your application.
+    \item \textbf{DynamoDB:} Accessed via AWS SDK or APIs. You do read/write operations with a primary key.
+\end{itemize}
+
+\clearpage
+
+% --------------------------------------------------------
+% 5. SAMPLE LAMBDA CODE (RECAP)
+% --------------------------------------------------------
+\section{Sample Lambda Code (Recap)}
+\justifying
+Here’s a simple AWS Lambda function in Python. Notice naming style: \textbf{PascalCase} for functions, \textbf{camelCase} for variables, and \textbf{MACRO\_CASE} for constants.
+
 \begin{minted}[fontsize=\small, frame=single]{python}
-def processImage(event, context):
+def ProcessFile(event, context):
+    # event: Contains details about what triggered this function (e.g., S3 upload).
+    # context: AWS environment info (e.g., memory, request ID).
+
     fileKey = event["Records"][0]["s3"]["object"]["key"]
-    # Perform some image processing...
-    return {"statusCode": 200, "body": "Success"}
+    print("Processing file:", fileKey)
+
+    MACRO_CONSTANT = 100
+    processedResult = f"File {fileKey} processed with constant {MACRO_CONSTANT}"
+
+    # Possibly store in S3, or update RDS / DynamoDB
+    return {
+        "statusCode": 200,
+        "body": processedResult
+    }
 \end{minted}
 
 \clearpage
 
 % --------------------------------------------------------
-% 6. HANDS-ON PROJECT IDEAS
+% 6. USE CASES WITH MULTI-DIRECTION FLOWS
 % --------------------------------------------------------
-\section{Hands-On Project Ideas}
-\justifying
+\section{Use Cases (Multi-Directional Flows)}
 
-\subsection{Beginner Projects}
-\textbf{1. Static Website on S3/CloudFront}\\
-Host a personal or portfolio site on S3, then speed it up globally with CloudFront.
-
-\textbf{2. Simple File Processor}\\
-When you upload a file, Lambda resizes or converts it. Great for learning event-driven tasks.
-
-\subsection{Intermediate Projects}
-\textbf{1. Full Web App (EC2, RDS, S3)}\\
-Run a web server on EC2, store user data in RDS, and keep images in S3.
-
-\textbf{2. Serverless API (API Gateway + Lambda + DynamoDB)}\\
-Everything is serverless. Lambda handles business logic, DynamoDB stores data.
-
-\subsection{Advanced Projects}
-\textbf{1. Real-Time Data (Kinesis + Lambda + DynamoDB)}\\
-Stream logs or sensor data into Kinesis, process in Lambda, save in DynamoDB.
-
-\textbf{2. Machine Learning (SageMaker + S3 + Lambda)}\\
-Store training data in S3, train a model with SageMaker, then call it via Lambda.
-
+\subsection*{6.1 Serverless File Processing with DynamoDB Logging}
 \begin{center}
-    \resizebox{0.95\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3.5cm]
-            \node[userFigure] (source) {Data Source};
-            \node[serviceBox, right=3.5cm of source] (kinesis) {Kinesis};
-            \node[serviceBox, right=3.5cm of kinesis] (lambda) {Lambda};
-            \node[database, right=3.5cm of lambda] (ddb) {DynamoDB};
-
-            \draw[arrowLine] (source) -- node[above]{\scriptsize Data Stream} (kinesis);
-            \draw[arrowLine] (kinesis) -- node[above]{\scriptsize Trigger} (lambda);
-            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Save Results} (ddb);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\clearpage
-
-% --------------------------------------------------------
-% 7. EXTRA VISUALS & STEP-BY-STEP FLOWS
-% --------------------------------------------------------
-\section{Extra Visuals \& Step-by-Step Flows}
-\justifying
-
-\subsection{Typical User Request Flow}
-\begin{center}
-    \resizebox{0.95\textwidth}{!}{%
+    \resizebox{0.9\textwidth}{!}{
         \begin{tikzpicture}[node distance=3cm]
-            \node[userFigure, text width=2.7cm] (user) {Client/User};
-            \node[serviceBox, right=3.5cm of user, text width=3.2cm] (dns) {DNS Lookup};
-            \node[serviceBox, right=3.5cm of dns, text width=3.2cm] (cloudfront) {CloudFront};
-            \node[serviceBox, right=3.5cm of cloudfront, text width=3.2cm] (app) {App Layer (EC2/Lambda)};
-            \node[database, right=3.5cm of app, text width=3.2cm] (db) {DB (RDS/DynamoDB)};
+            \node[userBox] (upload) {User Upload};
+            \node[awsBox, right=3cm of upload] (s3in) {S3 (Input)};
+            \node[awsBox, right=3cm of s3in] (lambda) {Lambda};
+            \node[awsBox, right=3cm of lambda] (s3out) {S3 (Output)};
+            \node[awsBox, below=1.5cm of lambda, text width=3cm] (ddb) {DynamoDB};
 
-            \draw[arrowLine] (user) -- node[above]{\scriptsize 1. Request domain} (dns);
-            \draw[arrowLine] (dns) -- node[above]{\scriptsize 2. Return IP} (cloudfront);
-            \draw[arrowLine] (cloudfront) -- node[above]{\scriptsize 3. Forward Request} (app);
-            \draw[arrowLine] (app) -- node[above]{\scriptsize 4. DB read/write} (db);
+            \draw[arrowLine] (upload) -- node[above]{\scriptsize File} (s3in);
+            \draw[arrowLine] (s3in) -- node[above]{\scriptsize Trigger} (lambda);
+            \draw[arrowLine] (lambda) -- node[above]{\scriptsize Save Result} (s3out);
+
+            % Additional arrow to Dynamo
+            \draw[arrowLine] (lambda) -- node[right]{\scriptsize Log} (ddb);
+            \draw[arrowLine] (ddb) -- node[left]{\scriptsize Read / Update} (lambda);
         \end{tikzpicture}
     }
 \end{center}
+\noindent
+\textbf{Flow:}
+1. User uploads to S3.
+2. Lambda processes the file.
+3. Output is saved in another S3 bucket.
+4. Lambda also logs metadata to DynamoDB (key-value store).
 
-\subsection{Simple Auto Scaling}
+\subsection*{6.2 A Hybrid Database Approach}
 \begin{center}
-    \resizebox{0.9\textwidth}{!}{%
-        \begin{tikzpicture}[node distance=3.5cm]
-            \node[serviceBox, text width=3.2cm] (ec2) {EC2 Instances};
-            \node[serviceBox, text width=3.5cm, right=4cm of ec2] (cw) {CloudWatch Alarms};
-            \node[serviceBox, text width=3.5cm, right=4cm of cw] (asg) {Auto Scaling Group};
-
-            \draw[arrowLine] (ec2) -- node[above]{\scriptsize Metrics} (cw);
-            \draw[arrowLine] (cw) -- node[above]{\scriptsize Alarm Trigger} (asg);
-        \end{tikzpicture}
-    }
-\end{center}
-
-\clearpage
-
-% --------------------------------------------------------
-% 8. A LEARNING PATH
-% --------------------------------------------------------
-\section{A Learning Path}
-\justifying
-
-\subsection{Step 1: Core Services}
-\begin{itemize}
-    \item \textbf{S3} for storing files
-    \item \textbf{Lambda} for event-driven code
-    \item \textbf{DynamoDB} for simple NoSQL
-\end{itemize}
-
-\subsection{Step 2: Building APIs and Servers}
-\begin{itemize}
-    \item \textbf{API Gateway} for REST calls
-    \item \textbf{EC2} for custom servers
-    \item \textbf{RDS} for relational data
-\end{itemize}
-
-\subsection{Step 3: Advanced Tools}
-\begin{itemize}
-    \item \textbf{Kinesis} for streaming data
-    \item \textbf{SageMaker} for machine learning
-    \item \textbf{Athena/Redshift} for analytics
-\end{itemize}
-
-\begin{center}
-    \resizebox{0.9\textwidth}{!}{%
+    \resizebox{0.95\textwidth}{!}{
         \begin{tikzpicture}[node distance=3cm]
-            \node[serviceBox, text width=3.5cm] (basic) {S3, Lambda, DynamoDB};
-            \node[serviceBox, right=4cm of basic, text width=3.5cm] (inter) {EC2, RDS, API GW};
-            \node[serviceBox, right=4cm of inter, text width=3.5cm] (advanced) {Kinesis, SageMaker};
+            \node[userBox] (user) {User};
 
-            \draw[arrowLine] (basic) -- (inter);
-            \draw[arrowLine] (inter) -- (advanced);
+            \node[awsBox, below=1.5cm of user, text width=3.5cm] (elb) {Load Balancer};
+            \draw[arrowLine] (user) -- (elb);
+            \draw[arrowLine] (elb) -- (user);
+
+            \node[awsBox, below left=2cm of elb] (ec2) {EC2};
+            \node[awsBox, below right=2cm of elb] (lambda) {Lambda};
+
+            \draw[arrowLine] (elb) -- (ec2);
+            \draw[arrowLine] (ec2) -- (elb);
+            \draw[arrowLine] (elb) -- (lambda);
+            \draw[arrowLine] (lambda) -- (elb);
+
+            \node[awsBox, left=3.2cm of ec2] (rds) {RDS (SQL)};
+            \node[awsBox, right=3.2cm of lambda] (ddb) {DynamoDB (NoSQL)};
+
+            \draw[arrowLine] (ec2) -- (rds);
+            \draw[arrowLine] (rds) -- (ec2);
+
+            \draw[arrowLine] (lambda) -- (ddb);
+            \draw[arrowLine] (ddb) -- (lambda);
+
+            % Possibly S3 in the middle for file storage
+            \node[awsBox, below=2cm of elb, text width=3.3cm] (s3) {S3};
+            \draw[arrowLine] (ec2) -- (s3);
+            \draw[arrowLine] (lambda) -- (s3);
+            \draw[arrowLine] (s3) -- (ec2);
+            \draw[arrowLine] (s3) -- (lambda);
+
         \end{tikzpicture}
     }
 \end{center}
+\noindent
+\textbf{Flow:}
+1. Some data is stored in RDS for \textbf{transactional} or \textbf{relational} needs.
+2. Some data is in DynamoDB for \textbf{high throughput} or \textbf{simple key-value} lookups.
+3. S3 holds files or static assets.
+4. Both \textbf{EC2} and \textbf{Lambda} can read from or write to any of these stores.
 
 \clearpage
 
 % --------------------------------------------------------
-% CONCLUSION
+% 7. CONCLUSION
 % --------------------------------------------------------
 \section*{Conclusion}
-\addcontentsline{toc}{section}{Conclusion}
 \justifying
+AWS provides many ways to store and manage data (\textbf{S3}, \textbf{EBS}, \textbf{RDS}, \textbf{DynamoDB}, etc.), each suited to different use cases. By mixing these services and letting data flow in multiple directions, you can build flexible, scalable architectures.
+\bigskip
 
-AWS lets you run applications in the cloud instead of managing your own hardware. You can store static files in \textbf{S3}, launch code on \textbf{Lambda}, or run a full server via \textbf{EC2}. Distributing apps across Regions and Availability Zones improves reliability.
-
-\textbf{Key Takeaways}:
+\textbf{Key Points:}
 \begin{itemize}
-    \item \textbf{Start small}: Try a static site on S3 or a simple file-processor with Lambda.
-    \item \textbf{Add complexity}: Use RDS or DynamoDB to store data, and CloudFront to speed up content delivery.
-    \item \textbf{Explore advanced features}: Handle real-time data (Kinesis) or train machine learning models (SageMaker).
+    \item \textbf{S3} is object storage for files, \textbf{EBS} is block storage for EC2 volumes, \textbf{RDS} handles SQL, and \textbf{DynamoDB} is NoSQL.
+    \item Compute can be \textbf{EC2} (full server) or \textbf{Lambda} (serverless). Both can talk to the same storage or database.
+    \item Frontend services like \textbf{CloudFront}, \textbf{API Gateway}, and \textbf{ELB} route user traffic.
+    \item Multi-directional flows are common: a Lambda might read from S3, write to DynamoDB, then trigger an event for more processing.
 \end{itemize}
 
-For more details, check out the
-\href{https://aws.amazon.com/documentation/}{\textbf{official AWS docs}},
-and use the \textbf{AWS Free Tier} to learn without large costs.
+\noindent
+\textbf{Next Steps}:
+\begin{itemize}
+    \item Sign up for the \textbf{AWS Free Tier} to try building your own environment.
+    \item Read the \href{https://docs.aws.amazon.com}{\textbf{AWS Documentation}} for deeper tutorials on each service.
+    \item Experiment with a small project (e.g., a static site on S3 + CloudFront, or a serverless file processor) to gain hands-on experience.
+\end{itemize}
 
 \end{document}

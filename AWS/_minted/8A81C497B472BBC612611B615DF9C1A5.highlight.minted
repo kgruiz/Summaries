@@ -1,0 +1,17 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{ProcessFile}\PYG{p}{(}\PYG{n}{event}\PYG{p}{,} \PYG{n}{context}\PYG{p}{)}\PYG{p}{:}
+    \PYG{c+c1}{\PYGZsh{} event: Contains details about what triggered this function (e.g., S3 upload).}
+    \PYG{c+c1}{\PYGZsh{} context: AWS environment info (e.g., memory, request ID).}
+
+    \PYG{n}{fileKey} \PYG{o}{=} \PYG{n}{event}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Records}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{s3}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{object}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{key}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{]}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{Processing file:}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{n}{fileKey}\PYG{p}{)}
+
+    \PYG{n}{MACRO\PYGZus{}CONSTANT} \PYG{o}{=} \PYG{l+m+mi}{100}
+    \PYG{n}{processedResult} \PYG{o}{=} \PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{File }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{fileKey}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ processed with constant }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{MACRO\PYGZus{}CONSTANT}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}
+
+    \PYG{c+c1}{\PYGZsh{} Possibly store in S3, or update RDS / DynamoDB}
+    \PYG{k}{return} \PYG{p}{\PYGZob{}}
+        \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{statusCode}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{l+m+mi}{200}\PYG{p}{,}
+        \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{body}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{:} \PYG{n}{processedResult}
+    \PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}
